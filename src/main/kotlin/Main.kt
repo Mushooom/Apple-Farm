@@ -1,5 +1,3 @@
-import models.AppleBin
-
 // Alexander Novakovsky Apple Farm App
 
 
@@ -7,7 +5,6 @@ import models.AppleBin
 
 // Main function
 fun main() {
-
     println("Time and date: ")
     println("Hello World!")
 
