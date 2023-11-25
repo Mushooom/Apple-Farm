@@ -5,8 +5,8 @@ import mu.KotlinLogging
 import utils.ScannerInput.ScannerInput.readNextInt
 import utils.ScannerInput.ScannerInput.readNextLine
 import java.io.File
-import kotlin.system.exitProcess
 import persistence.JSONSerializer
+import java.time.LocalDateTime
 
 // Logger variable
 var logger = KotlinLogging.logger{}
@@ -24,10 +24,15 @@ fun main() {
 fun mainMenu(): Int {
     return readNextInt("""
         APPLE FARM APP
+        
         Main menu:
         1. add bin
         2. list bins
+        3. number of bins
+        4. finished bins
         0. exit
+        
+        Enter option: 
     """.trimIndent()
     )
 }
@@ -38,6 +43,8 @@ fun runMenu(){
         when (val option: Int = mainMenu()) {
             1 -> addBin()
             2 -> listAllBins()
+            3 -> println(appleBinAPI.numberOfBins())
+            4 -> println(appleBinAPI.numberOfFinishedBins())
            // 0 -> exitApp()
             else -> println("Invalid option")
         }
@@ -48,8 +55,12 @@ fun runMenu(){
 fun addBin(){
     logger.info { "Adding new Bin to grading" }
     val batch = readNextLine("Batch: ")
-    val variety = readNextLine("Variety: ")
-    val isAdded = appleBinAPI.add(AppleBin(batch, variety, isBinFinished = false))
+    val isEatingApple = appleBinAPI.isEatingApple()
+    fun variety(): String {
+        return if (isEatingApple == true) readNextLine("Variety: ") else "Bramley"
+    }
+    val time = java.util.Date()
+    val isAdded = appleBinAPI.add(AppleBin(batch, isEatingApple, variety(), time, isBinFinished = false))
 
     if (isAdded) {
         println("Bin added")
