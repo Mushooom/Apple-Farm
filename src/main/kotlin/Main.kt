@@ -6,10 +6,13 @@ import utils.ScannerInput.ScannerInput.readNextInt
 import utils.ScannerInput.ScannerInput.readNextLine
 import java.io.File
 import persistence.JSONSerializer
-import java.time.LocalDateTime
+import java.util.Date
+import kotlin.system.exitProcess
+
 
 // Logger variable
 var logger = KotlinLogging.logger{}
+var time = Date()
 
 // AppleBinAPI variable
 private val appleBinAPI = AppleBinAPI(JSONSerializer(File("bins.json")))
@@ -24,12 +27,14 @@ fun main() {
 fun mainMenu(): Int {
     return readNextInt("""
         APPLE FARM APP
+        Today: $time
         
         Main menu:
-        1. add bin
-        2. list bins
-        3. number of bins
-        4. finished bins
+        1. Input
+        2. Output
+        3. Show active bin
+        4. Count finished bins
+        99. Dummy Data
         0. exit
         
         Enter option: 
@@ -41,15 +46,66 @@ fun mainMenu(): Int {
 fun runMenu(){
     do {
         when (val option: Int = mainMenu()) {
+            1 -> runInput()
+            2 -> listAllBins()
+            3 -> activeBins()
+            4 -> println(appleBinAPI.numberOfFinishedBins())
+            99 -> dummyData()
+            0 -> exitApp()
+            else -> println("Invalid option $option")
+        }
+    } while (true)
+}
+
+// Sub menu for Input
+fun runInput() {
+    do {
+        when (val option: Int = inputMenu()) {
             1 -> addBin()
             2 -> listAllBins()
             3 -> println(appleBinAPI.numberOfBins())
             4 -> println(appleBinAPI.numberOfFinishedBins())
-           // 0 -> exitApp()
-            else -> println("Invalid option")
+            5 -> activeBins()
+            6 -> println(appleBinAPI.listFinishedBins())
+            7 -> finishBin()
+            66 -> runMenu()
+            99 -> dummyData()
+            0 -> exitApp()
+            else -> println("Invalid option: $option")
         }
     } while (true)
 }
+
+// Gui for input sub menu
+fun inputMenu(): Int {
+    return readNextInt(
+        """
+        APPLE FARM GRADING INPUT
+        $time
+        
+        Input Menu:
+        1. Add bin
+        2. List all bins
+        3. Count all bins
+        4. Count finished bins
+        5. List active bins
+        6. List finished bins
+        7. Finish bin
+        66. Main menu
+        99. Dummy Data
+        0. exit
+        
+        Enter option: 
+    """.trimIndent()
+    )
+}
+/*
+
+// Sub menu for Output
+fun output(){
+
+}
+*/
 
 // Function add bin
 fun addBin(){
@@ -57,10 +113,9 @@ fun addBin(){
     val batch = readNextLine("Batch: ")
     val isEatingApple = appleBinAPI.isEatingApple()
     fun variety(): String {
-        return if (isEatingApple == true) readNextLine("Variety: ") else "Bramley"
+        return if (isEatingApple) readNextLine("Variety: ") else "Bramley"
     }
-    val time = java.util.Date()
-    val isAdded = appleBinAPI.add(AppleBin(batch, isEatingApple, variety(), time, isBinFinished = false))
+    val isAdded = appleBinAPI.add(AppleBin(batch, isEatingApple, variety(), time, Date(0,0,0), false))
 
     if (isAdded) {
         println("Bin added")
@@ -74,3 +129,35 @@ fun listAllBins() {
     println(appleBinAPI.listAllBins())
 }
 
+// Function to list active bins
+fun activeBins(){
+    println(appleBinAPI.listActiveBins())
+}
+
+// Function exit -- application exit on selecting 0 from menu
+fun exitApp(){
+    println("App exiting")
+    logger.info { "App terminated" }
+    exitProcess(0)
+}
+
+// Function finish the bin
+fun finishBin(){
+    // First check if there is an active bin
+    activeBins()
+    if (appleBinAPI.numberOfActiveBins() == 1) {
+        val binToFinish = readNextInt("Enter bin number to finish: ")
+        // Pass the index of bin to be finished
+        if (appleBinAPI.finishBin(binToFinish)) {
+            println("Bin finished")
+        } else {
+            println("Error")
+        }
+    }
+}
+
+// Dummy data
+fun dummyData() {
+    appleBinAPI.add(AppleBin("27", true, "Red Elstar", time, timeFinished = Date(0,0,0), true))
+    appleBinAPI.add(AppleBin("Pl", false, "Bramley", time, timeFinished = Date(0,0,0), true))
+}
