@@ -6,13 +6,18 @@ import utils.ScannerInput.ScannerInput.readNextInt
 import utils.ScannerInput.ScannerInput.readNextLine
 import java.io.File
 import persistence.JSONSerializer
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Date
 import kotlin.system.exitProcess
 
 
+
 // Logger variable
 var logger = KotlinLogging.logger{}
-var time = Date()
+var currentTime = LocalDateTime.now()
+var time2 = currentTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))
+
 
 // AppleBinAPI variable
 private val appleBinAPI = AppleBinAPI(JSONSerializer(File("bins.json")))
@@ -27,7 +32,7 @@ fun main() {
 fun mainMenu(): Int {
     return readNextInt("""
         APPLE FARM APP
-        Today: $time
+        Today: $time2
         
         Main menu:
         1. Input
@@ -68,6 +73,7 @@ fun runInput() {
             5 -> activeBins()
             6 -> println(appleBinAPI.listFinishedBins())
             7 -> finishBin()
+            8 -> timeDifference()
             66 -> runMenu()
             99 -> dummyData()
             0 -> exitApp()
@@ -81,7 +87,7 @@ fun inputMenu(): Int {
     return readNextInt(
         """
         APPLE FARM GRADING INPUT
-        $time
+        $time2
         
         Input Menu:
         1. Add bin
@@ -91,6 +97,7 @@ fun inputMenu(): Int {
         5. List active bins
         6. List finished bins
         7. Finish bin
+        8. Time difference
         66. Main menu
         99. Dummy Data
         0. exit
@@ -115,7 +122,7 @@ fun addBin(){
     fun variety(): String {
         return if (isEatingApple) readNextLine("Variety: ") else "Bramley"
     }
-    val isAdded = appleBinAPI.add(AppleBin(batch, isEatingApple, variety(), time, Date(0,0,0), false))
+    val isAdded = appleBinAPI.add(AppleBin(batch, isEatingApple, variety(), time2, null, false))
 
     if (isAdded) {
         println("Bin added")
@@ -156,8 +163,19 @@ fun finishBin(){
     }
 }
 
+
+// Function time difference
+fun timeDifference(){
+    time2
+   // println(appleBinAPI.listFinishedBins())
+}
+
+
 // Dummy data
 fun dummyData() {
-    appleBinAPI.add(AppleBin("27", true, "Red Elstar", time, timeFinished = Date(0,0,0), true))
-    appleBinAPI.add(AppleBin("Pl", false, "Bramley", time, timeFinished = Date(0,0,0), true))
+    appleBinAPI.add(AppleBin("27", true, "Red Elstar", time2, null, true))
+    appleBinAPI.add(AppleBin("Pl", false, "Bramley", time2, null, true))
 }
+
+
+

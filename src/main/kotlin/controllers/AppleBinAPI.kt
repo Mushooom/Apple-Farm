@@ -5,6 +5,8 @@ import persistence.Serializer
 import utils.ScannerInput
 import utils.ScannerInput.ScannerInput.readNextChar
 import utils.ScannerInput.ScannerInput.readNextLine
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 
 // Controller class for AppleBin
@@ -35,6 +37,11 @@ class AppleBinAPI(serializerType: Serializer) {
                 appleBins.indexOf(appleBin).toString() + ": " + appleBin.toString()
             }
 
+    // Function to format finished bins to string
+    private fun formatFinishedBinsString(binsToFormat: List<AppleBin>): String =
+        binsToFormat
+            .joinToString (separator = "\n") { appleBin ->
+                appleBins.indexOf(appleBin).toString() + ": " + appleBin.batch + " Time started: " + appleBin.timeStarted+ "\n Time Finished: " + appleBin.timeFinished }
     // Fuction to list all bins in the system
     fun listAllBins(): String =
         if (appleBins.isEmpty()) "\nNo bins\n"
@@ -52,7 +59,7 @@ class AppleBinAPI(serializerType: Serializer) {
     // Function to list finished if want to check for variety date etc.
     fun listFinishedBins(): String =
         if (numberOfFinishedBins() == 0) "No bins have been graded"
-        else formatListString(appleBins.filter { appleBin: AppleBin -> appleBin.isBinFinished  })
+        else formatFinishedBinsString(appleBins.filter { appleBin: AppleBin -> appleBin.isBinFinished  })
 
 
 
@@ -84,7 +91,7 @@ class AppleBinAPI(serializerType: Serializer) {
             var binToFinish = appleBins[indexToFinish]
             if (!binToFinish.isBinFinished){
                 binToFinish.isBinFinished = true
-                binToFinish.timeFinished = java.util.Date()
+                binToFinish.timeFinished = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))
                 return true
             }
         }
@@ -107,4 +114,5 @@ class AppleBinAPI(serializerType: Serializer) {
             appleBins[index]
         } else null
     }
+
 }
