@@ -38,10 +38,19 @@ class AppleBinAPI(serializerType: Serializer) {
             }
 
     // Function to format finished bins to string
-    private fun formatFinishedBinsString(binsToFormat: List<AppleBin>): String =
+    fun formatFinishedBinsString(binsToFormat: List<AppleBin>): String =
         binsToFormat
             .joinToString (separator = "\n") { appleBin ->
-                appleBins.indexOf(appleBin).toString() + ": " + appleBin.batch + " Time started: " + appleBin.timeStarted+ "\n Time Finished: " + appleBin.timeFinished }
+                appleBins.indexOf(appleBin).toString() + ": " + "Batch: " + appleBin.batch + " Time started: " + appleBin.timeStarted+ "\n Time Finished: " + appleBin.timeFinished }
+
+
+    // Function format by variety
+    fun formatVariety(binsToFormat: List<AppleBin>): String =
+        binsToFormat
+            .joinToString (separator = "\n") { appleBin ->
+                appleBins.indexOf(appleBin).toString() + ": " + "Variety: " + appleBin.variety
+            }
+
     // Fuction to list all bins in the system
     fun listAllBins(): String =
         if (appleBins.isEmpty()) "\nNo bins\n"
@@ -52,9 +61,33 @@ class AppleBinAPI(serializerType: Serializer) {
         return appleBins.size
     }
 
-    // Function finished bins
+    // Function to count all finished bins
     fun numberOfFinishedBins(): Int =
         appleBins.count { appleBin: AppleBin -> appleBin.isBinFinished }
+
+    // Function to count finished bramleys
+    fun numberOfFinishedBramleyBins(): Int =
+        appleBins.count { appleBin: AppleBin -> appleBin.isBinFinished && !appleBin.isEatingApple}
+
+    // Function to count finished eating apple bins
+    fun numberOfFinishedEatingAppleBins(): Int =
+        appleBins.count {appleBin: AppleBin -> appleBin.isBinFinished && appleBin.isEatingApple }
+/*
+    // Function advanced finished bins count
+    fun finishedBinsByVariety(): String =
+        if (numberOfFinishedBins() == 0) "No bins have been graded"
+        else println("100").toString()
+*/
+
+
+/*
+
+    // Function list finished bramleys list
+    fun bramleyFinishedBins(): String =
+        if (numberOfFinishedBins() == 0) "No bins have been graded"
+        else formatVariety(appleBins.filter { appleBin: AppleBin -> !appleBin.isEatingApple })
+*/
+
 
     // Function to list finished if want to check for variety date etc.
     fun listFinishedBins(): String =
@@ -77,11 +110,9 @@ class AppleBinAPI(serializerType: Serializer) {
     fun isEatingApple(): Boolean {
         do {
             val input = readNextChar("Eating apple? Y/N: ")
-            if ((input == 'y') || (input == 'Y')) {
-                return true
-            } else if ((input == 'n') || (input == 'N')) {
-                return false
-            } else println("Wrong answer")
+            if ((input == 'y') || (input == 'Y')) return true else if ((input == 'n') || (input == 'N')) {
+                    return false
+                } else println("Wrong answer")
         }
             while (true)
     }
@@ -106,7 +137,7 @@ class AppleBinAPI(serializerType: Serializer) {
     }
 
     // Function to check if there are items in ArrayList
-    private fun isValidListIndex(index: Int, list: List<Any>): Boolean {
+    fun isValidListIndex(index: Int, list: List<Any>): Boolean {
         return (index >= 0 && index < list.size)
     }
 

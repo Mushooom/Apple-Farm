@@ -14,8 +14,8 @@ import kotlin.system.exitProcess
 
 // Logger variable
 var logger = KotlinLogging.logger{}
-var currentTime = LocalDateTime.now()
-var time2 = currentTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))
+var currentTime = LocalDateTime.now()!!
+var time2 = currentTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!
 
 
 // AppleBinAPI variable
@@ -36,8 +36,9 @@ fun mainMenu(): Int {
         Main menu:
         1. Input
         2. Output
-        3. Show active bin
-        4. Count finished bins
+        3. Finish bin
+        4. Finished eating apple bins
+        5. Finished bramley bins
         99. Dummy Data
         0. exit
         
@@ -52,8 +53,9 @@ fun runMenu(){
         when (val option: Int = mainMenu()) {
             1 -> runInput()
             2 -> listAllBins()
-            3 -> activeBins()
-            4 -> println(appleBinAPI.numberOfFinishedBins())
+            3 -> finishBin()
+            4 -> finishedEatingAppleBins()
+            5 -> finishedBramleyBins()
             99 -> dummyData()
             0 -> exitApp()
             else -> println("Invalid option $option")
@@ -169,11 +171,21 @@ fun timeDifference(){
    // println(appleBinAPI.listFinishedBins())
 }
 
+// Function display finished bramley bins
+fun finishedBramleyBins(){
+    println("Finished Bramley bins: " + appleBinAPI.numberOfFinishedBramleyBins())
+}
+
+// Function to display finished eating apple bins
+fun finishedEatingAppleBins(){
+    println("Finished eating apple bins: " + appleBinAPI.numberOfFinishedEatingAppleBins())
+}
 
 // Dummy data
 fun dummyData() {
     appleBinAPI.add(AppleBin("27", true, "Red Elstar", time2, null, true))
     appleBinAPI.add(AppleBin("Pl", false, "Bramley", time2, null, true))
+    appleBinAPI.add(AppleBin("Pl", false, "Bramley", time2, null, false))
 }
 
 
