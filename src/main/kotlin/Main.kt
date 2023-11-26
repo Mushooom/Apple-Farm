@@ -8,7 +8,6 @@ import java.io.File
 import persistence.JSONSerializer
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Date
 import kotlin.system.exitProcess
 
 
@@ -152,7 +151,7 @@ fun exitApp(){
 fun finishBin(){
     // First check if there is an active bin
     activeBins()
-    if (appleBinAPI.numberOfActiveBins() == 1) {
+    if (appleBinAPI.numberOfActiveBins() > 0) {
         val binToFinish = readNextInt("Enter bin number to finish: ")
         // Pass the index of bin to be finished
         if (appleBinAPI.finishBin(binToFinish)) {

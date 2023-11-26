@@ -75,13 +75,15 @@ class AppleBinAPI(serializerType: Serializer) {
 
     // Function to check for an eating apple
     fun isEatingApple(): Boolean {
-        val input = readNextChar("Eating apple? Y/N: ")
-        if ((input == 'y') || (input == 'Y')) {
-            return true
-        } else if ((input == 'n') || (input == 'N')) {
-            return false
-        } else println("Wrong answer")
-        return TODO("Provide the return value")
+        do {
+            val input = readNextChar("Eating apple? Y/N: ")
+            if ((input == 'y') || (input == 'Y')) {
+                return true
+            } else if ((input == 'n') || (input == 'N')) {
+                return false
+            } else println("Wrong answer")
+        }
+            while (true)
     }
 
     // Function to finish grading bin
