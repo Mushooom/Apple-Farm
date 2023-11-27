@@ -19,7 +19,7 @@ var time2 = currentTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!
 
 
 // AppleBinAPI variable
-private val appleBinAPI = AppleBinAPI(JSONSerializer(File("bins.json")))
+private var appleBinAPI = AppleBinAPI(JSONSerializer(File("bins.json")))
 
 // Main function
 fun main() {
@@ -69,12 +69,11 @@ fun runInput() {
         when (val option: Int = inputMenu()) {
             1 -> addBin()
             2 -> listAllBins()
-            3 -> println(appleBinAPI.numberOfBins())
-            4 -> println(appleBinAPI.numberOfFinishedBins())
+            3 -> println("All bins count: " + appleBinAPI.numberOfBins())
+            4 -> println("Finished bins: " + appleBinAPI.numberOfFinishedBins())
             5 -> activeBins()
             6 -> println(appleBinAPI.listFinishedBins())
             7 -> finishBin()
-            8 -> timeDifference()
             66 -> runMenu()
             99 -> dummyData()
             0 -> exitApp()
@@ -98,7 +97,6 @@ fun inputMenu(): Int {
         5. List active bins
         6. List finished bins
         7. Finish bin
-        8. Time difference
         66. Main menu
         99. Dummy Data
         0. exit
@@ -138,6 +136,7 @@ fun listAllBins() {
 }
 
 // Function to list active bins
+// TODO should be only one at the time!!
 fun activeBins(){
     println(appleBinAPI.listActiveBins())
 }
@@ -162,13 +161,6 @@ fun finishBin(){
             println("Error")
         }
     }
-}
-
-
-// Function time difference
-fun timeDifference(){
-    time2
-   // println(appleBinAPI.listFinishedBins())
 }
 
 // Function display finished bramley bins

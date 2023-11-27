@@ -72,29 +72,11 @@ class AppleBinAPI(serializerType: Serializer) {
     // Function to count finished eating apple bins
     fun numberOfFinishedEatingAppleBins(): Int =
         appleBins.count {appleBin: AppleBin -> appleBin.isBinFinished && appleBin.isEatingApple }
-/*
-    // Function advanced finished bins count
-    fun finishedBinsByVariety(): String =
-        if (numberOfFinishedBins() == 0) "No bins have been graded"
-        else println("100").toString()
-*/
-
-
-/*
-
-    // Function list finished bramleys list
-    fun bramleyFinishedBins(): String =
-        if (numberOfFinishedBins() == 0) "No bins have been graded"
-        else formatVariety(appleBins.filter { appleBin: AppleBin -> !appleBin.isEatingApple })
-*/
-
 
     // Function to list finished if want to check for variety date etc.
     fun listFinishedBins(): String =
         if (numberOfFinishedBins() == 0) "No bins have been graded"
         else formatFinishedBinsString(appleBins.filter { appleBin: AppleBin -> appleBin.isBinFinished  })
-
-
 
     // Function active bins -- should always be only one at the time
     fun numberOfActiveBins(): Int =
