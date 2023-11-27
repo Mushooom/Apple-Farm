@@ -1,6 +1,8 @@
 // Alexander Novakovsky Apple Farm App
 import controllers.AppleBinAPI
 import models.AppleBin
+import controllers.OutputAPI
+import models.Output
 import mu.KotlinLogging
 import utils.ScannerInput.ScannerInput.readNextInt
 import utils.ScannerInput.ScannerInput.readNextLine
@@ -20,6 +22,7 @@ var time2 = currentTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!
 
 // AppleBinAPI variable
 private var appleBinAPI = AppleBinAPI(JSONSerializer(File("bins.json")))
+private var outputAPI = OutputAPI(JSONSerializer(File("output.json")))
 
 // Main function
 fun main() {
@@ -40,7 +43,7 @@ fun mainMenu(): Int {
         4. Finished eating apple bins
         5. Finished bramley bins
         99. Dummy Data
-        0. exit
+        0. Exit
         
         Enter option: 
     """.trimIndent()
@@ -52,7 +55,7 @@ fun runMenu(){
     do {
         when (val option: Int = mainMenu()) {
             1 -> runInput()
-            2 -> listAllBins()
+            2 -> runOutput()
             3 -> finishBin()
             4 -> finishedEatingAppleBins()
             5 -> finishedBramleyBins()
@@ -99,19 +102,49 @@ fun inputMenu(): Int {
         7. Finish bin
         66. Main menu
         99. Dummy Data
-        0. exit
+        0. Exit
         
         Enter option: 
     """.trimIndent()
     )
 }
-/*
+
+// Gui for output sub menu
+fun outputMenu(): Int {
+    return readNextInt(
+        """
+            APPLE FARM PACKING
+            $time2
+            
+            Packing Output Menu:
+            1. Musgraves eating apples 
+            2. Musgraves bramleys
+            3. Phillip Little
+            4. Other
+            66. Main menu
+            77. Dummy Data
+            0. Exit
+            
+            Enter option:
+        """.trimIndent()
+    )
+}
 
 // Sub menu for Output
-fun output(){
-
+fun runOutput(){
+    do {
+        when (val option: Int = outputMenu()) {
+            1 -> println("Musgraves eating")
+            2 -> println("Musgraves bramley")
+            3 -> println("Phillip little")
+            4 -> addOutput()
+            66 -> runMenu()
+            77 -> dummyData()
+            0 -> exitApp()
+            else -> println("Wrong option $option")
+        }
+    } while (true)
 }
-*/
 
 // Function add bin
 fun addBin(){
@@ -127,6 +160,25 @@ fun addBin(){
         println("Bin added")
     } else {
         println("Add failed")
+    }
+}
+
+
+// Function add output
+fun addOutput(){
+    logger.info { "Adding packed products" }
+    val isEatingApple = appleBinAPI.isEatingApple()
+    fun variety(): String {
+        return if (isEatingApple) readNextLine("Variety: ") else "Bramley"
+    }
+    val type = readNextLine("Type: ")
+    val count: Int = readNextInt("Add volume: ")
+    val adding = outputAPI.addOutput(Output(isEatingApple, variety(), type, count))
+
+    if (adding) {
+        println("Added")
+    } else {
+        println("Error")
     }
 }
 
