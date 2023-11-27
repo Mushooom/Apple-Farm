@@ -22,4 +22,16 @@ class OutputAPI(serializerType: Serializer) {
         return outputList.add(output)
     }
 
+    // Function to format list of strings -- to my desired format
+    private fun formatListString(outputFormat: List<Output>): String =
+        outputFormat
+            .joinToString(separator = "\n") { output ->
+                outputList.indexOf(output).toString() + ": " + output.toString() }
+
+    // Function to list all output
+    fun listOutput(): String =
+        if (outputList.isEmpty()) "Nothing packed today"
+        else formatListString(outputList)
+
+
 }

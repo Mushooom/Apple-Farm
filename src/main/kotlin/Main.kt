@@ -120,7 +120,8 @@ fun outputMenu(): Int {
             1. Musgraves eating apples 
             2. Musgraves bramleys
             3. Phillip Little
-            4. Other
+            4. Add output
+            5. List all output
             66. Main menu
             77. Dummy Data
             0. Exit
@@ -138,6 +139,7 @@ fun runOutput(){
             2 -> println("Musgraves bramley")
             3 -> println("Phillip little")
             4 -> addOutput()
+            5 -> listOutput()
             66 -> runMenu()
             77 -> dummyData()
             0 -> exitApp()
@@ -168,12 +170,17 @@ fun addBin(){
 fun addOutput(){
     logger.info { "Adding packed products" }
     val isEatingApple = appleBinAPI.isEatingApple()
-    fun variety(): String {
-        return if (isEatingApple) readNextLine("Variety: ") else "Bramley"
+    val variety = if (isEatingApple) {
+        readNextLine("Variety: ")
+    } else {
+        "Bramley"
     }
+/*    fun variety(): String {
+        return if (isEatingApple) readNextLine("Variety: ") else "Bramley"
+    }*/
     val type = readNextLine("Type: ")
     val count: Int = readNextInt("Add volume: ")
-    val adding = outputAPI.addOutput(Output(isEatingApple, variety(), type, count))
+    val adding = outputAPI.addOutput(Output(isEatingApple, variety, type, count))
 
     if (adding) {
         println("Added")
@@ -182,6 +189,10 @@ fun addOutput(){
     }
 }
 
+// Function list all output
+fun listOutput(){
+    println(outputAPI.listOutput())
+}
 // Function to list Bins
 fun listAllBins() {
     println(appleBinAPI.listAllBins())
