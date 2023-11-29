@@ -1,7 +1,5 @@
 package models
 
-import java.sql.Date
-
 data class OutputPL(
     var batch: String,
     var isEatingApple: Boolean,

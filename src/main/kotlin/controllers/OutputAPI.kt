@@ -30,11 +30,14 @@ class OutputAPI(serializerType: Serializer) {
         return outputPLList.add(outputPL)
     }
 
+/*
+
     // Function to format list of strings -- to my desired format
     private fun formatListString(outputFormat: List<Output>): String =
         outputFormat
             .joinToString(separator = "\n") { output ->
                 outputList.indexOf(output).toString() + ": " + output.toString() }
+*/
 
     // Function to format a list of strings for musgraves -- variety, type and count
     private fun formatMString(outputFormatM: List<Output>): String =
@@ -50,10 +53,12 @@ class OutputAPI(serializerType: Serializer) {
                 "Batch: " + outputPL.batch + " " + outputPL.type + " x" + outputPL.count
             }
 
+    /*
     // Function to list all output
     fun listOutput(): String =
         if (outputList.isEmpty()) "Nothing packed today"
         else formatListString(outputList)
+     */
 
     // Function to list Phillip Little output -- format PL
     fun listOutputPL():  String =
@@ -65,10 +70,13 @@ class OutputAPI(serializerType: Serializer) {
         if (outputList.isEmpty()) "Nothing packed for Musgraves today"
         else formatMString(outputList)
 
+/*
     // Function to list: variety type and count
     fun listVTC(): String =
         if (outputList.isEmpty()) "Nothing packed today"
             else formatVTCString(outputList)
+*/
+
 
     // Function to list all eating apples output in VTC format
     fun listEatingOutputVTC(): String =

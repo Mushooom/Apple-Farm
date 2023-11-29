@@ -309,10 +309,14 @@ fun finishedEatingAppleBins(){
     println("Finished eating apple bins: " + appleBinAPI.numberOfFinishedEatingAppleBins())
 }
 
+/*
+
 // Function to list variety type and count of Output
 fun listVTC(){
     println(outputAPI.listVTC())
 }
+*/
+
 
 // Function to list eating apples Output for musgraves -- variety type and count
 fun listEatingApplesVTC() {
