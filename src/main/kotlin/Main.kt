@@ -14,7 +14,6 @@ import java.time.format.DateTimeFormatter
 
 import kotlin.system.exitProcess
 
-// Commit
 
 // Logger variable
 var logger = KotlinLogging.logger{}
@@ -25,6 +24,12 @@ var time2 = currentTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!
 // AppleBinAPI variable
 private var appleBinAPI = AppleBinAPI(JSONSerializer(File("bins.json")))
 private var outputAPI = OutputAPI(JSONSerializer(File("output.json")))
+
+// Colours
+// ref: https://discuss.kotlinlang.org/t/printing-in-colors/22492
+const val red = "\u001b[31m"
+const val green = "\u001b[32m"
+const val resetColour = "\u001b[0m"
 
 // Main function
 fun main() {
@@ -252,7 +257,9 @@ fun addPLOutput(){
 
 // Function list all output
 fun listOutput(){
-    println("Musgraves:\n " + outputAPI.listOutputM())
+    println("Musgraves:")
+    println(red + outputAPI.listEatingOutputVTC() + resetColour)
+    println(green + outputAPI.listBramleyOutputVTC() + resetColour)
     println("Phillip Little:\n " + outputAPI.listOutputPL())
 }
 
@@ -317,15 +324,14 @@ fun listVTC(){
 }
 */
 
-
 // Function to list eating apples Output for musgraves -- variety type and count
 fun listEatingApplesVTC() {
-    println(outputAPI.listEatingOutputVTC())
+    println(red + outputAPI.listEatingOutputVTC() + resetColour)
 }
 
 // Function to list bramleys Output for musgraves -- VTC format
 fun listBramleyVTC(){
-    println(outputAPI.listBramleyOutputVTC())
+    println(green + outputAPI.listBramleyOutputVTC() + resetColour)
 }
 
 // Dummy data
