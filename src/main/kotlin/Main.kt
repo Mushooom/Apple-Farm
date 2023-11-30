@@ -3,6 +3,7 @@ import controllers.AppleBinAPI
 import models.AppleBin
 import controllers.OutputAPI
 import models.Output
+import models.OutputPL
 import mu.KotlinLogging
 import utils.ScannerInput.ScannerInput.readNextInt
 import utils.ScannerInput.ScannerInput.readNextLine
@@ -10,9 +11,9 @@ import java.io.File
 import persistence.JSONSerializer
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+
 import kotlin.system.exitProcess
 
-// Commit
 
 // Logger variable
 var logger = KotlinLogging.logger{}
@@ -23,6 +24,12 @@ var time2 = currentTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!
 // AppleBinAPI variable
 private var appleBinAPI = AppleBinAPI(JSONSerializer(File("bins.json")))
 private var outputAPI = OutputAPI(JSONSerializer(File("output.json")))
+
+// Colours
+// ref: https://discuss.kotlinlang.org/t/printing-in-colors/22492
+const val red = "\u001b[31m"
+const val green = "\u001b[32m"
+const val resetColour = "\u001b[0m"
 
 // Main function
 fun main() {
@@ -120,8 +127,12 @@ fun outputMenu(): Int {
             1. Musgraves eating apples 
             2. Musgraves bramleys
             3. Phillip Little
-            4. Add output
+            4. Add other output
             5. List all output
+            6. List Phillip Little -- BTC
+            7. List eating apples for musgraves -- VTC
+            8. List bramley for musgraves -- VTC
+            9. List musgraves all
             66. Main menu
             77. Dummy Data
             0. Exit
@@ -135,13 +146,17 @@ fun outputMenu(): Int {
 fun runOutput(){
     do {
         when (val option: Int = outputMenu()) {
-            1 -> println("Musgraves eating")
-            2 -> println("Musgraves bramley")
-            3 -> println("Phillip little")
+            1 -> addMusgravesEating()
+            2 -> addMusgravesBramley()
+            3 -> addPLOutput()
             4 -> addOutput()
             5 -> listOutput()
+            6 -> listOutputPL()
+            7 -> listEatingApplesVTC()
+            8 -> listBramleyVTC()
+            9 -> listOutputM()
             66 -> runMenu()
-            77 -> dummyData()
+            77 -> dummyData77()
             0 -> exitApp()
             else -> println("Wrong option $option")
         }
@@ -189,10 +204,75 @@ fun addOutput(){
     }
 }
 
+// Function to add musgraves eating apples
+fun addMusgravesEating(){
+    logger.info { "Adding musgraves eating apples" }
+    val variety = readNextLine("Variety: ")
+    val type = readNextLine("Type: ")
+    val count: Int = readNextInt("Add volume: ")
+    val addingMusgravesEating = outputAPI.addOutput(Output(isEatingApple = true, variety, type, count))
+
+    if (addingMusgravesEating) {
+        println("Added: +$count $variety $type ")
+    } else {
+        println("Error")
+    }
+}
+
+// Function add musgraves bramley
+fun addMusgravesBramley(){
+    logger.info { "Adding musgraves bramleys" }
+    val variety = "Bramley"
+    val type = readNextLine("Type: ")
+    val count: Int = readNextInt("Add volume: ")
+    val addingMusgravesBramley = outputAPI.addOutput(Output(isEatingApple = false, variety, type, count))
+
+    if (addingMusgravesBramley) {
+        println("Added: +$count $type")
+    } else {
+        println("Error")
+    }
+}
+
+// Function add output for Phillip Little
+fun addPLOutput(){
+    logger.info { "Adding PL" }
+    val batch = readNextLine("Batch: ")
+    val isEatingApple = appleBinAPI.isEatingApple()
+    val variety = if (isEatingApple) {
+        readNextLine("Variety: ")
+    } else {
+        "Bramley"
+    }
+    val type = readNextLine("Type: ")
+    val count: Int = readNextInt("Add volume: ")
+    val addPLOutput = outputAPI.addOutputPL(OutputPL(batch, isEatingApple, variety,type, count, time2))
+
+    if (addPLOutput) {
+        println("Added +$count")
+    } else {
+        println("Error")
+    }
+}
+
 // Function list all output
 fun listOutput(){
-    println(outputAPI.listOutput())
+    println("Musgraves:")
+    println(red + outputAPI.listEatingOutputVTC() + resetColour)
+    println(green + outputAPI.listBramleyOutputVTC() + resetColour)
+    println("Phillip Little:\n " + outputAPI.listOutputPL())
 }
+
+// Function list musgraves output - variety type count
+fun listOutputM(){
+    println(outputAPI.listOutputM())
+}
+
+// Function list Phillip Output -- batch type count
+fun listOutputPL(){
+    println(outputAPI.listOutputPL())
+}
+
 // Function to list Bins
 fun listAllBins() {
     println(appleBinAPI.listAllBins())
@@ -236,6 +316,24 @@ fun finishedEatingAppleBins(){
     println("Finished eating apple bins: " + appleBinAPI.numberOfFinishedEatingAppleBins())
 }
 
+/*
+
+// Function to list variety type and count of Output
+fun listVTC(){
+    println(outputAPI.listVTC())
+}
+*/
+
+// Function to list eating apples Output for musgraves -- variety type and count
+fun listEatingApplesVTC() {
+    println(red + outputAPI.listEatingOutputVTC() + resetColour)
+}
+
+// Function to list bramleys Output for musgraves -- VTC format
+fun listBramleyVTC(){
+    println(green + outputAPI.listBramleyOutputVTC() + resetColour)
+}
+
 // Dummy data
 fun dummyData() {
     appleBinAPI.add(AppleBin("27", true, "Red Elstar", time2, null, true))
@@ -243,5 +341,17 @@ fun dummyData() {
     appleBinAPI.add(AppleBin("Pl", false, "Bramley", time2, null, false))
 }
 
-
+// Dummy data 77
+fun dummyData77(){
+    outputAPI.addOutput(Output(true, "Red Elstar", "SV 6pk", 25))
+    outputAPI.addOutput(Output(true, "Red Elstar", "CT 4pk", 8 ))
+    outputAPI.addOutput(Output(true, "Red Elstar", "Premium loose 50", 10))
+    outputAPI.addOutput(Output(true, "Red Elstar", "Bag 8pk", 27))
+    outputAPI.addOutput(Output(false, "Bramley", "SV 4pk", 60))
+    outputAPI.addOutput(Output(false, "Bramley", "13kg", 15))
+    outputAPI.addOutput(Output(false, "Bramley", "13kg Large", 13))
+    outputAPI.addOutput(Output(false, "Bramley", "CT 4pk", 20))
+    outputAPI.addOutputPL(OutputPL("19", true, "Red Elstar", "Count 72", 160, time2))
+    outputAPI.addOutputPL(OutputPL("19", true, "Red Elstar", "Count 96", 159, time2))
+}
 
