@@ -1,12 +1,10 @@
 package controllers
 import models.Output
-import models.OutputPL
 import persistence.Serializer
 
 // Controller for output
 class OutputAPI(serializerType: Serializer) {
     private var outputList = ArrayList<Output>()
-    private var outputPLList = ArrayList<OutputPL>()
     private var serializer: Serializer = serializerType
 
 
@@ -26,11 +24,6 @@ class OutputAPI(serializerType: Serializer) {
         return outputList.add(output)
     }
 
-    // Function to add output to arraylist PL
-    fun addOutputPL(outputPL: OutputPL): Boolean {
-        return outputPLList.add(outputPL)
-    }
-
 /*
 
     // Function to format list of strings -- to my desired format
@@ -47,24 +40,12 @@ class OutputAPI(serializerType: Serializer) {
                "Variety: " + output.variety +  " -- Type: " + output.type + " x" + output.count
     }
 
-    // Function to format list for Phillip Little -- batch, type, count
-    private fun formatPLString(outputFormatPL: List<OutputPL>): String =
-        outputFormatPL
-            .joinToString (separator = "\n") { outputPL ->
-                "Batch: " + outputPL.batch + " " + outputPL.type + " x" + outputPL.count
-            }
-
     /*
     // Function to list all output
     fun listOutput(): String =
         if (outputList.isEmpty()) "Nothing packed today"
         else formatListString(outputList)
      */
-
-    // Function to list Phillip Little output -- format PL
-    fun listOutputPL():  String =
-        if (outputPLList.isEmpty()) "Nothing packed for Phillip today"
-        else formatPLString(outputPLList)
 
     // Function to list Musgraves output -- format M
     fun listOutputM(): String =
