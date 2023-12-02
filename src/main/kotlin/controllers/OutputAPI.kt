@@ -40,25 +40,17 @@ class OutputAPI(serializerType: Serializer) {
                "Variety: " + output.variety +  " -- Type: " + output.type + " x" + output.count
     }
 
-    /*
-    // Function to list all output
-    fun listOutput(): String =
-        if (outputList.isEmpty()) "Nothing packed today"
-        else formatListString(outputList)
-     */
+    // Function to format list of strings -- variety, type and count
+    private fun formatVTCString(outputVTC: List<Output>): String =
+        outputVTC
+            .joinToString(separator = "\n") { output ->
+                output.variety + " " + output.type + " " + "x" + output.count }
+
 
     // Function to list Musgraves output -- format M
     fun listOutputM(): String =
         if (outputList.isEmpty()) "Nothing packed for Musgraves today"
         else formatMString(outputList)
-
-/*
-    // Function to list: variety type and count
-    fun listVTC(): String =
-        if (outputList.isEmpty()) "Nothing packed today"
-            else formatVTCString(outputList)
-*/
-
 
     // Function to list all eating apples output in VTC format
     fun listEatingOutputVTC(): String =
@@ -69,12 +61,6 @@ class OutputAPI(serializerType: Serializer) {
     fun listBramleyOutputVTC(): String =
         if (outputList.isEmpty()) "No bramleys packed"
         else formatVTCString(outputList.filter { output: Output -> !output.isEatingApple  })
-
-    // Function to format list of strings -- variety, type and count
-    private fun formatVTCString(outputVTC: List<Output>): String =
-        outputVTC
-            .joinToString(separator = "\n") { output ->
-                output.variety + " " + output.type + " " + "x" + output.count }
 
 // End of OutputAPI class
 }

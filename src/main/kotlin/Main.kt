@@ -79,7 +79,6 @@ fun runMenu(){
             2 -> runOutput()
             22 -> saveOutput()
             3 -> finishBin()
-            33 -> saveAll()
             34 -> loadAll()
             4 -> finishedEatingAppleBins()
             5 -> finishedBramleyBins()
@@ -113,6 +112,7 @@ fun inputMenu(): Int {
         6. List finished bins
         7. Finish bin
         66. Main menu
+        88. Save all
         99. Dummy Data
         0. Exit
         
@@ -161,6 +161,9 @@ fun outputMenu(): Int {
             7. List eating apples for musgraves -- VTC
             8. List bramley for musgraves -- VTC
             9. List musgraves all
+            55. Load all output
+            56. Load musgraves output
+            57. Load PL output
             66. Main menu
             77. Dummy Data
             0. Exit
@@ -178,12 +181,15 @@ fun runOutput(){
             2 -> addMusgravesBramley()
             3 -> addPLOutput()
             4 -> addOutput()
-            44 -> saveOutput()
+            44 -> saveBothOutputs()
             5 -> listOutput()
             6 -> listOutputPL()
             7 -> listEatingApplesVTC()
             8 -> listBramleyVTC()
             9 -> listOutputM()
+            55 -> loadBothOutputs()
+            56 -> loadOutput()
+            57 -> loadOutputPL()
             66 -> runMenu()
             77 -> dummyData77()
             0 -> exitApp()
@@ -232,6 +238,27 @@ fun addOutput(){
     }
 }
 
+// Function add output for Phillip Little
+fun addPLOutput(){
+    logger.info { "Adding PL" }
+    val batch = readNextLine("Batch: ")
+    val isEatingApple = appleBinAPI.isEatingApple()
+    val variety = if (isEatingApple) {
+        readNextLine("Variety: ")
+    } else {
+        "Bramley"
+    }
+    val type = readNextLine("Type: ")
+    val count: Int = readNextInt("Add volume: ")
+    val addPLOutput = outputPLAPI.addOutputPL(OutputPL(batch, isEatingApple, variety,type, count, time2))
+
+    if (addPLOutput) {
+        println("Added +$count")
+    } else {
+        println("Error")
+    }
+}
+
 // Function to add musgraves eating apples
 fun addMusgravesEating(){
     logger.info { "Adding musgraves eating apples" }
@@ -257,27 +284,6 @@ fun addMusgravesBramley(){
 
     if (addingMusgravesBramley) {
         println("Added: +$count $type")
-    } else {
-        println("Error")
-    }
-}
-
-// Function add output for Phillip Little
-fun addPLOutput(){
-    logger.info { "Adding PL" }
-    val batch = readNextLine("Batch: ")
-    val isEatingApple = appleBinAPI.isEatingApple()
-    val variety = if (isEatingApple) {
-        readNextLine("Variety: ")
-    } else {
-        "Bramley"
-    }
-    val type = readNextLine("Type: ")
-    val count: Int = readNextInt("Add volume: ")
-    val addPLOutput = outputPLAPI.addOutputPL(OutputPL(batch, isEatingApple, variety,type, count, time2))
-
-    if (addPLOutput) {
-        println("Added +$count")
     } else {
         println("Error")
     }
@@ -411,6 +417,11 @@ fun saveOutputPL(){
         System.err.println("Error saving PL output to file $e")
     }
 }
+
+fun saveBothOutputs(){
+    saveOutput()
+    saveOutputPL()
+}
 fun saveAll(){
     saveInput()
     saveOutput()
@@ -442,6 +453,10 @@ fun loadOutputPL(){
     }
 }
 
+fun loadBothOutputs(){
+    loadOutput()
+    loadOutputPL()
+}
 
 fun loadAll(){
     loadInput()

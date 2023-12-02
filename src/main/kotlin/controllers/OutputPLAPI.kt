@@ -1,5 +1,4 @@
 package controllers
-
 import models.OutputPL
 import persistence.Serializer
 
@@ -16,7 +15,7 @@ class OutputPLAPI (serializerType: Serializer){
     @Throws(Exception::class)
     fun store() {
         serializer.write(outputPLList)
-        print("Saving output one\n")
+        print("Saving output PL\n")
     }
 
     // Function to add output to arraylist PL
