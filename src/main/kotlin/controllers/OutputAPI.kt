@@ -94,5 +94,5 @@ class OutputAPI(serializerType: Serializer) {
             .joinToString(separator = "\n") { output ->
                 output.variety + " " + output.type + " " + "x" + output.count }
 
-
+// End of OutputAPI class
 }

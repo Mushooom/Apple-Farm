@@ -343,14 +343,14 @@ fun listBramleyVTC(){
 
 // Helper function to list oneActiveOnly bin
 fun listOneActiveOnly(): Int {
-    if (appleBinAPI.numberOfActiveBins() == 0) return 99999
-    else return (appleBinAPI.listOneOnlyActiveBins())
+    return if (appleBinAPI.numberOfActiveBins() == 0) 99999
+    else (appleBinAPI.listOneOnlyActiveBins())
 }
 
 /*
 
 // Auto finish
-var trippleTest = listOneActiveOnly()
+var tripleTest = listOneActiveOnly()
 
 
 fun quickFinish() {
@@ -360,7 +360,7 @@ fun quickFinish() {
             if (appleBinAPI.finishBin(binToFinish)) {
                 println("Bin finished")
             } else {
-                println("Error $trippleTest")
+                println("Error $tripleTest")
             }
         }
     addBin()
