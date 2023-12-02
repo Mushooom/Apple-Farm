@@ -24,7 +24,7 @@ class AppleBinAPI(serializerType: Serializer) {
     @Throws(Exception::class)
     fun store() {
         serializer.write(appleBins)
-        print("Saving all\n")
+        print("Saving input\n")
     }
 
     // Function to add AppleBin
@@ -56,11 +56,6 @@ class AppleBinAPI(serializerType: Serializer) {
                 appleBins.indexOf(appleBin).toString() + ": " + "Variety: " + appleBin.variety
             }
 
-    // Fuction to list all bins in the system
-    fun listAllBins(): String =
-        if (appleBins.isEmpty()) "\nNo bins\n"
-        else formatListString(appleBins)
-
     // Function number of bins
     fun numberOfBins(): Int {
         return appleBins.size
@@ -78,14 +73,19 @@ class AppleBinAPI(serializerType: Serializer) {
     fun numberOfFinishedEatingAppleBins(): Int =
         appleBins.count { appleBin: AppleBin -> appleBin.isBinFinished && appleBin.isEatingApple }
 
+    // Function active bins -- should always be only one at the time
+    fun numberOfActiveBins(): Int =
+        appleBins.count { appleBin: AppleBin -> !appleBin.isBinFinished }
+
+    // Fuction to list all bins in the system
+    fun listAllBins(): String =
+        if (appleBins.isEmpty()) "\nNo bins\n"
+        else formatListString(appleBins)
+
     // Function to list finished if want to check for variety date etc.
     fun listFinishedBins(): String =
         if (numberOfFinishedBins() == 0) "No bins have been graded"
         else formatFinishedBinsString(appleBins.filter { appleBin: AppleBin -> appleBin.isBinFinished })
-
-    // Function active bins -- should always be only one at the time
-    fun numberOfActiveBins(): Int =
-        appleBins.count { appleBin: AppleBin -> !appleBin.isBinFinished }
 
     // Function to list active (not finished bins) should be just one at the time
     fun listActiveBins(): String =
