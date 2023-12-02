@@ -9,23 +9,24 @@ class OutputAPI(serializerType: Serializer) {
     private var outputPLList = ArrayList<OutputPL>()
     private var serializer: Serializer = serializerType
 
+
     @Throws(Exception::class)
     fun load() {
         outputList = (serializer.read() as ArrayList<Output>)
-        outputPLList = (serializer.read()) as ArrayList<OutputPL>
     }
 
     @Throws(Exception::class)
     fun store() {
         serializer.write(outputList)
-        serializer.write(outputPLList)
-        print("Saving all\n")
+        print("Saving output one\n")
     }
 
+    // Function add output to output list
     fun addOutput(output: Output): Boolean {
         return outputList.add(output)
     }
 
+    // Function to add output to arraylist PL
     fun addOutputPL(outputPL: OutputPL): Boolean {
         return outputPLList.add(outputPL)
     }

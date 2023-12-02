@@ -23,6 +23,7 @@ var time2 = currentTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!
 
 // AppleBinAPI variable
 private var appleBinAPI = AppleBinAPI(JSONSerializer(File("bins.json")))
+// OutputAPI variable
 private var outputAPI = OutputAPI(JSONSerializer(File("output.json")))
 
 // Colours
@@ -45,13 +46,18 @@ fun mainMenu(): Int {
         
         Main menu:
         1. Input
+        11. Save input
         2. Output
+        22. Save output
+        33. Save all
+        34. Load all
         3. Finish bin
         4. Finished eating apple bins
         5. Finished bramley bins
         6. List all packed
         7. One active bin only index
         8. List all bins
+        88. Save all
         99. Dummy Data
         0. Exit
         
@@ -65,13 +71,18 @@ fun runMenu(){
     do {
         when (val option: Int = mainMenu()) {
             1 -> runInput()
+            11 -> saveInput()
             2 -> runOutput()
+            22 -> saveOutput()
             3 -> finishBin()
+            33 -> saveAll()
+            34 -> loadAll()
             4 -> finishedEatingAppleBins()
             5 -> finishedBramleyBins()
             6 -> listOutput()
             7 -> println(listOneActiveOnly())
             8 -> listAllBins()
+            88 -> saveAll()
             99 -> dummyData()
             0 -> exitApp()
             else -> println("Invalid option $option")
@@ -84,7 +95,9 @@ fun runInput() {
     do {
         when (val option: Int = inputMenu()) {
             1 -> addBin()
+            11 -> saveInput()
             2 -> listAllBins()
+            22 -> loadInput()
             3 -> println("All bins count: " + appleBinAPI.numberOfBins())
             4 -> println("Finished bins: " + appleBinAPI.numberOfFinishedBins())
             44 -> println("Unfinished: " + appleBinAPI.numberOfActiveBins())
@@ -108,7 +121,9 @@ fun inputMenu(): Int {
         
         Input Menu:
         1. Add bin
+        11. Save input
         2. List all bins
+        22. Load input
         3. Count all bins
         4. Count finished bins
         44. Count unfinished
@@ -136,6 +151,7 @@ fun outputMenu(): Int {
             2. Musgraves bramleys
             3. Phillip Little
             4. Add other output
+            44. Save output
             5. List all output
             6. List Phillip Little -- BTC
             7. List eating apples for musgraves -- VTC
@@ -158,6 +174,7 @@ fun runOutput(){
             2 -> addMusgravesBramley()
             3 -> addPLOutput()
             4 -> addOutput()
+            44 -> saveOutput()
             5 -> listOutput()
             6 -> listOutputPL()
             7 -> listEatingApplesVTC()
@@ -323,14 +340,6 @@ fun finishedEatingAppleBins(){
     println("Finished eating apple bins: " + appleBinAPI.numberOfFinishedEatingAppleBins())
 }
 
-/*
-
-// Function to list variety type and count of Output
-fun listVTC(){
-    println(outputAPI.listVTC())
-}
-*/
-
 // Function to list eating apples Output for musgraves -- variety type and count
 fun listEatingApplesVTC() {
     println(red + outputAPI.listEatingOutputVTC() + resetColour)
@@ -372,6 +381,50 @@ fun addAutoFinish() {
 }
 */
 
+// Functions save -- input, output, all
+fun saveInput(){
+    try {
+        appleBinAPI.store()
+    } catch (e: Exception){
+        System.err.println("Error saving input to file: $e")
+    }
+}
+
+fun saveOutput(){
+    try {
+        outputAPI.store()
+        logger.info { "Saving one" }
+    } catch (e: Exception){
+        System.err.println("Error saving output to file: $e")
+    }
+}
+
+fun saveAll(){
+    saveInput()
+    saveOutput()
+}
+
+// Functions load -- input, output, all
+fun loadInput(){
+    try {
+        appleBinAPI.load()
+    } catch (e: Exception){
+        System.err.println("Error loading from file: $e")
+    }
+}
+
+fun loadOutput(){
+    try {
+        outputAPI.load()
+    } catch (e: Exception){
+        System.err.println("Error loading from file: $e")
+    }
+}
+
+fun loadAll(){
+    loadInput()
+    loadOutput()
+}
 // Dummy data
 fun dummyData() {
     appleBinAPI.add(AppleBin("27", true, "Red Elstar", time2, null, true))

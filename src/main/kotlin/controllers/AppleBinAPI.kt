@@ -24,7 +24,7 @@ class AppleBinAPI(serializerType: Serializer) {
     @Throws(Exception::class)
     fun store() {
         serializer.write(appleBins)
-        print("Saving all\n")
+        print("Saving input\n")
     }
 
     // Function to add AppleBin
