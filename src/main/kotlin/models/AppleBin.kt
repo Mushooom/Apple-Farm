@@ -1,6 +1,5 @@
 package models
 
-
 // Data class for AppleBin
 
 data class AppleBin(

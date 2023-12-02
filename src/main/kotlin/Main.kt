@@ -3,6 +3,7 @@ import controllers.AppleBinAPI
 import models.AppleBin
 import controllers.OutputAPI
 import models.Output
+import controllers.OutputPLAPI
 import models.OutputPL
 import mu.KotlinLogging
 import utils.ScannerInput.ScannerInput.readNextInt
@@ -11,6 +12,7 @@ import java.io.File
 import persistence.JSONSerializer
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+
 
 import kotlin.system.exitProcess
 
@@ -25,6 +27,8 @@ var time2 = currentTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!
 private var appleBinAPI = AppleBinAPI(JSONSerializer(File("bins.json")))
 // OutputAPI variable
 private var outputAPI = OutputAPI(JSONSerializer(File("output.json")))
+// OutputPLAPI variable
+private var outputPLAPI = OutputPLAPI(JSONSerializer(File("outputPL.json")))
 
 // Colours
 // ref: https://discuss.kotlinlang.org/t/printing-in-colors/22492
@@ -75,7 +79,6 @@ fun runMenu(){
             2 -> runOutput()
             22 -> saveOutput()
             3 -> finishBin()
-            33 -> saveAll()
             34 -> loadAll()
             4 -> finishedEatingAppleBins()
             5 -> finishedBramleyBins()
@@ -88,6 +91,34 @@ fun runMenu(){
             else -> println("Invalid option $option")
         }
     } while (true)
+}
+
+// Gui for input sub menu
+fun inputMenu(): Int {
+    return readNextInt(
+        """
+        APPLE FARM GRADING INPUT
+        $time2
+        
+        Input Menu:
+        1. Add bin
+        11. Save input
+        2. List all bins
+        22. Load input
+        3. Count all bins
+        4. Count finished bins
+        44. Count unfinished
+        5. List active bins
+        6. List finished bins
+        7. Finish bin
+        66. Main menu
+        88. Save all
+        99. Dummy Data
+        0. Exit
+        
+        Enter option: 
+    """.trimIndent()
+    )
 }
 
 // Sub menu for Input
@@ -112,33 +143,6 @@ fun runInput() {
     } while (true)
 }
 
-// Gui for input sub menu
-fun inputMenu(): Int {
-    return readNextInt(
-        """
-        APPLE FARM GRADING INPUT
-        $time2
-        
-        Input Menu:
-        1. Add bin
-        11. Save input
-        2. List all bins
-        22. Load input
-        3. Count all bins
-        4. Count finished bins
-        44. Count unfinished
-        5. List active bins
-        6. List finished bins
-        7. Finish bin
-        66. Main menu
-        99. Dummy Data
-        0. Exit
-        
-        Enter option: 
-    """.trimIndent()
-    )
-}
-
 // Gui for output sub menu
 fun outputMenu(): Int {
     return readNextInt(
@@ -157,6 +161,9 @@ fun outputMenu(): Int {
             7. List eating apples for musgraves -- VTC
             8. List bramley for musgraves -- VTC
             9. List musgraves all
+            55. Load all output
+            56. Load musgraves output
+            57. Load PL output
             66. Main menu
             77. Dummy Data
             0. Exit
@@ -174,12 +181,15 @@ fun runOutput(){
             2 -> addMusgravesBramley()
             3 -> addPLOutput()
             4 -> addOutput()
-            44 -> saveOutput()
+            44 -> saveBothOutputs()
             5 -> listOutput()
             6 -> listOutputPL()
             7 -> listEatingApplesVTC()
             8 -> listBramleyVTC()
             9 -> listOutputM()
+            55 -> loadBothOutputs()
+            56 -> loadOutput()
+            57 -> loadOutputPL()
             66 -> runMenu()
             77 -> dummyData77()
             0 -> exitApp()
@@ -228,6 +238,27 @@ fun addOutput(){
     }
 }
 
+// Function add output for Phillip Little
+fun addPLOutput(){
+    logger.info { "Adding PL" }
+    val batch = readNextLine("Batch: ")
+    val isEatingApple = appleBinAPI.isEatingApple()
+    val variety = if (isEatingApple) {
+        readNextLine("Variety: ")
+    } else {
+        "Bramley"
+    }
+    val type = readNextLine("Type: ")
+    val count: Int = readNextInt("Add volume: ")
+    val addPLOutput = outputPLAPI.addOutputPL(OutputPL(batch, isEatingApple, variety,type, count, time2))
+
+    if (addPLOutput) {
+        println("Added +$count")
+    } else {
+        println("Error")
+    }
+}
+
 // Function to add musgraves eating apples
 fun addMusgravesEating(){
     logger.info { "Adding musgraves eating apples" }
@@ -258,33 +289,12 @@ fun addMusgravesBramley(){
     }
 }
 
-// Function add output for Phillip Little
-fun addPLOutput(){
-    logger.info { "Adding PL" }
-    val batch = readNextLine("Batch: ")
-    val isEatingApple = appleBinAPI.isEatingApple()
-    val variety = if (isEatingApple) {
-        readNextLine("Variety: ")
-    } else {
-        "Bramley"
-    }
-    val type = readNextLine("Type: ")
-    val count: Int = readNextInt("Add volume: ")
-    val addPLOutput = outputAPI.addOutputPL(OutputPL(batch, isEatingApple, variety,type, count, time2))
-
-    if (addPLOutput) {
-        println("Added +$count")
-    } else {
-        println("Error")
-    }
-}
-
 // Function list all output
 fun listOutput(){
     println("Musgraves:")
     println(red + outputAPI.listEatingOutputVTC() + resetColour)
     println(green + outputAPI.listBramleyOutputVTC() + resetColour)
-    println("Phillip Little:\n " + outputAPI.listOutputPL())
+    println("Phillip Little:\n " + outputPLAPI.listOutputPL())
 }
 
 // Function list musgraves output - variety type count
@@ -294,7 +304,7 @@ fun listOutputM(){
 
 // Function list Phillip Output -- batch type count
 fun listOutputPL(){
-    println(outputAPI.listOutputPL())
+    println(outputPLAPI.listOutputPL())
 }
 
 // Function to list Bins
@@ -399,9 +409,23 @@ fun saveOutput(){
     }
 }
 
+fun saveOutputPL(){
+    try {
+        outputPLAPI.store()
+        logger.info { "Saving PL" }
+    } catch (e: Exception){
+        System.err.println("Error saving PL output to file $e")
+    }
+}
+
+fun saveBothOutputs(){
+    saveOutput()
+    saveOutputPL()
+}
 fun saveAll(){
     saveInput()
     saveOutput()
+    saveOutputPL()
 }
 
 // Functions load -- input, output, all
@@ -421,9 +445,23 @@ fun loadOutput(){
     }
 }
 
+fun loadOutputPL(){
+    try {
+        outputPLAPI.load()
+    } catch (e: Exception){
+        System.err.println("Error loading from file: $e")
+    }
+}
+
+fun loadBothOutputs(){
+    loadOutput()
+    loadOutputPL()
+}
+
 fun loadAll(){
     loadInput()
     loadOutput()
+    loadOutputPL()
 }
 // Dummy data
 fun dummyData() {
@@ -442,7 +480,8 @@ fun dummyData77(){
     outputAPI.addOutput(Output(false, "Bramley", "13kg", 15))
     outputAPI.addOutput(Output(false, "Bramley", "13kg Large", 13))
     outputAPI.addOutput(Output(false, "Bramley", "CT 4pk", 20))
-    outputAPI.addOutputPL(OutputPL("19", true, "Red Elstar", "Count 72", 160, time2))
-    outputAPI.addOutputPL(OutputPL("19", true, "Red Elstar", "Count 96", 159, time2))
+    outputPLAPI.addOutputPL(OutputPL("19", true, "Red Elstar", "Count 72", 160, time2))
+    outputPLAPI.addOutputPL(OutputPL("19", true, "Red Elstar", "Count 96", 159, time2))
+    outputPLAPI.addOutputPL(OutputPL("19", false, "Bramley", "100kg", 9, time2))
 }
 

@@ -1,1 +1,1 @@
-{"object-stream":{"list":[""]}}
+{"object-stream":{"list":[{"models.AppleBin":[{"batch":27,"isEatingApple":true,"variety":"Red Elstar","timeStarted":"02.12.2023 19:58","isBinFinished":true},{"batch":"Pl","isEatingApple":false,"variety":"Bramley","timeStarted":"02.12.2023 19:58","isBinFinished":true},{"batch":"Pl","isEatingApple":false,"variety":"Bramley","timeStarted":"02.12.2023 19:58","isBinFinished":false}]}]}}

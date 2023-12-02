@@ -2,7 +2,7 @@ package persistence
 
 import com.thoughtworks.xstream.XStream
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver
-import models.AppleBin
+import models.*
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
@@ -12,6 +12,8 @@ class JSONSerializer(private val file: File) : Serializer {
     override fun read(): Any {
         val xStream = XStream(JettisonMappedXmlDriver())
         xStream.allowTypes(arrayOf(AppleBin::class.java))
+        xStream.allowTypes(arrayOf(Output::class.java))
+        xStream.allowTypes(arrayOf(OutputPL::class.java))
         val inputStream = xStream.createObjectInputStream(FileReader(file))
         val obj = inputStream.readObject() as Any
         inputStream.close()
