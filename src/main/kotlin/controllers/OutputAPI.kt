@@ -24,6 +24,11 @@ class OutputAPI(serializerType: Serializer) {
         return outputList.add(output)
     }
 
+    // Function number of packed
+    fun numberOfPacked(): Int {
+        return outputList.size
+    }
+
 /*
 
     // Function to format list of strings -- to my desired format
