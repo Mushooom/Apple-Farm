@@ -2,6 +2,7 @@ package controllers
 import models.Output
 import persistence.Serializer
 
+
 // Controller for output
 class OutputAPI(serializerType: Serializer) {
     private var outputList = ArrayList<Output>()

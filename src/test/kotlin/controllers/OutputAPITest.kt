@@ -23,7 +23,7 @@ class OutputAPITest {
     private var addOutput: OutputAPI? = OutputAPI(JSONSerializer(File("output.json")))
     private var emptyOutput: OutputAPI? = OutputAPI(JSONSerializer(File("output.json")))
 
-    @BeforeEach // Dummy Data -- set values and load into APP arraylist -- 7
+    @BeforeEach // Dummy Data -- set values and load into APP arraylist - 7
     fun setup(){
         sEating = Output(true, "Red Elstar", "6packSV", 50)
         sBramley = Output(false, "Bramley", "4packSV", 25)
@@ -33,7 +33,7 @@ class OutputAPITest {
         looseBramley = Output(false, "Bramley", "Loose 13kg", 13)
         looseBramleyLarge = Output(false, "Bramley", "Loose large", 7)
 
-        // Adding the output values to array list -- 7
+        // Adding the output values to arraylist - 7
         addOutput!!.addOutput(sEating!!)
         addOutput!!.addOutput(sBramley!!)
         addOutput!!.addOutput(cEating!!)
@@ -53,6 +53,8 @@ class OutputAPITest {
         looseEating = null
         looseBramley = null
         looseBramleyLarge = null
+        addOutput = null
+        emptyOutput = null
     //End of tearDown
     }
 
@@ -90,7 +92,7 @@ class OutputAPITest {
         fun `list all output from empty arraylist`(){
             assertEquals(0, emptyOutput!!.numberOfPacked())
             assertTrue(emptyOutput!!.listOutputM().contains("Nothing packed for Musgraves today"))
-        //End list all -- empty array
+        //End list all -- empty arraylist
         }
 
         //Test to list all from populated arraylist - 7
