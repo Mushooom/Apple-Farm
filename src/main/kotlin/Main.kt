@@ -102,6 +102,7 @@ fun inputMenu(): Int {
         
         Input Menu:
         1. Add bin
+        10. Add auto finish
         11. Save input
         2. List all bins
         22. Load input
@@ -109,6 +110,7 @@ fun inputMenu(): Int {
         4. Count finished bins
         44. Count unfinished
         5. List active bins
+        55. Index of active bin
         6. List finished bins
         7. Finish bin
         66. Main menu
@@ -126,6 +128,7 @@ fun runInput() {
     do {
         when (val option: Int = inputMenu()) {
             1 -> addBin()
+            10 -> addAutoFinish()
             11 -> saveInput()
             2 -> listAllBins()
             22 -> loadInput()
@@ -133,6 +136,7 @@ fun runInput() {
             4 -> println("Finished bins: " + appleBinAPI.numberOfFinishedBins())
             44 -> println("Unfinished: " + appleBinAPI.numberOfActiveBins())
             5 -> activeBins()
+            55 -> println(listOneActiveOnly())
             6 -> println(appleBinAPI.listFinishedBins())
             7 -> finishBin()
             66 -> runMenu()
@@ -157,6 +161,7 @@ fun outputMenu(): Int {
             4. Add other output
             44. Save output
             5. List all output
+            55. Index of one
             6. List Phillip Little -- BTC
             7. List eating apples for musgraves -- VTC
             8. List bramley for musgraves -- VTC
@@ -362,24 +367,22 @@ fun listBramleyVTC(){
 
 // Helper function to list oneActiveOnly bin
 fun listOneActiveOnly(): Int {
-    return if (appleBinAPI.numberOfActiveBins() == 0) 99999
-    else (appleBinAPI.listOneOnlyActiveBins())
+    return (appleBinAPI.listOneOnlyActiveBins()).toInt()
 }
 
-/*
+
 
 // Auto finish
-var tripleTest = listOneActiveOnly()
 
 
 fun quickFinish() {
-        if (appleBinAPI.numberOfActiveBins() > 0) {
+        if (listOneActiveOnly() < 999999) {
             val binToFinish = listOneActiveOnly()
             // Pass the index of bin to be finished
             if (appleBinAPI.finishBin(binToFinish)) {
                 println("Bin finished")
             } else {
-                println("Error $tripleTest")
+                println("Error")
             }
         }
     addBin()
@@ -389,7 +392,7 @@ fun addAutoFinish() {
     if (appleBinAPI.numberOfActiveBins() == 0) addBin()
     else if (appleBinAPI.numberOfActiveBins() == 1) quickFinish()
 }
-*/
+
 
 // Functions save -- input, output, all
 fun saveInput(){

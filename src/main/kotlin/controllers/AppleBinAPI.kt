@@ -143,8 +143,9 @@ class AppleBinAPI(serializerType: Serializer) {
                 appleBins.indexOf(appleBin).toString()
             }
 
-    fun listOneOnlyActiveBins(): Int =
-        formatActiveBin(appleBins.filter { appleBin: AppleBin -> !appleBin.isBinFinished }).toInt()
+    fun listOneOnlyActiveBins(): String =
+        if (numberOfActiveBins() == 0) "999999"
+        else formatActiveBin(appleBins.filter { appleBin: AppleBin -> !appleBin.isBinFinished })
 
 //End of function AppleBinAPI
 }
