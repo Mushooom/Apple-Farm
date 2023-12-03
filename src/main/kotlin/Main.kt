@@ -127,8 +127,7 @@ fun inputMenu(): Int {
 fun runInput() {
     do {
         when (val option: Int = inputMenu()) {
-            1 -> addBin()
-            10 -> addAutoFinish()
+            1 -> addAutoFinish()
             11 -> saveInput()
             2 -> listAllBins()
             22 -> loadInput()
