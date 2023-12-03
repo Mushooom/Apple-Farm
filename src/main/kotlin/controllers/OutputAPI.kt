@@ -2,6 +2,7 @@ package controllers
 import models.Output
 import persistence.Serializer
 
+
 // Controller for output
 class OutputAPI(serializerType: Serializer) {
     private var outputList = ArrayList<Output>()
@@ -22,6 +23,11 @@ class OutputAPI(serializerType: Serializer) {
     // Function add output to output list
     fun addOutput(output: Output): Boolean {
         return outputList.add(output)
+    }
+
+    // Function number of packed
+    fun numberOfPacked(): Int {
+        return outputList.size
     }
 
 /*

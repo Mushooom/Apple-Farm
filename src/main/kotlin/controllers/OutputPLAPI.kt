@@ -1,4 +1,6 @@
 package controllers
+
+//Imports
 import models.OutputPL
 import persistence.Serializer
 
@@ -34,6 +36,11 @@ class OutputPLAPI (serializerType: Serializer){
     fun listOutputPL():  String =
         if (outputPLList.isEmpty()) "Nothing packed for Phillip today"
         else formatPLString(outputPLList)
+
+    // Function to count Phillip Litlle output
+    fun numberOfOutputPL(): Int {
+        return outputPLList.size
+    }
 
 // End of outputPLAPI class
 }

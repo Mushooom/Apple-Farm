@@ -40,7 +40,7 @@ class AppleBinAPITest {
         addBins!!.add(eatingAppleBinPL!!)
         addBins!!.add(bramleyBinPL!!)
         addBins!!.add(newVarietyBin!!)
-        //End of setup
+    //End of setup
     }
 
     @AfterEach // Delete all the values after each test -- clean the arraylist
@@ -52,32 +52,32 @@ class AppleBinAPITest {
         newVarietyBin = null
         addBins = null
         emptyBins =null
-        //End of tearDown
+    //End of tearDown
     }
 
     //Tests for adding the bins
     @Nested
     inner class AddBins {
-        @Test // Test to add bin to empty arraylist
+        @Test //Test to add bin to empty arraylist
         fun `adding a bin to empty arraylist`() {
             val newBin = AppleBin("EmptyListBatch", true, "Red", time3, time3+1, false)
             assertEquals(0, actual = emptyBins!!.numberOfBins())
             assertTrue(/* condition = */ emptyBins!!.add(newBin))
             assertEquals(1, emptyBins!!.numberOfBins())
             assertEquals(newBin, emptyBins!!.findBin(index = emptyBins!!.numberOfBins() -1))
-            // End of adding to empty arraylist
+            //End of adding to empty arraylist
         }
 
-        @Test // Test to add bin to populated arraylist
+        @Test //Test to add bin to populated arraylist
         fun `adding a bin to populated arraylist`(){
             val newBin = AppleBin("PopulatedBatch", false, "Bramley", time3, time3+2, true)
             assertEquals(5, addBins!!.numberOfBins())
             assertTrue(/* condition = */ addBins!!.add(newBin))
             assertEquals(6, addBins!!.numberOfBins())
             assertEquals(newBin, addBins!!.findBin(addBins!!.numberOfBins() -1))
-            // End of adding to populated arraylist
+        //End of adding to populated arraylist
         }
-        // End of Nested AddBins class
+    //End of Nested AddBins class
     }
 
     //Test for listing the bins
@@ -92,7 +92,7 @@ class AppleBinAPITest {
         //End list -- empty array
         }
 
-        // Test to list -- populated arraylist
+        // Test to list from populated arraylist
         @Test
         fun `list all bins form populated arraylist`(){
             assertEquals(5, addBins!!.numberOfBins())
@@ -102,7 +102,7 @@ class AppleBinAPITest {
             assertTrue(noteBin.contains("Jonagored"))
             assertTrue(noteBin.contains("Bramley2"))
             assertTrue(noteBin.contains("Honey crunch"))
-        //End list populated array
+        //End list -- populated array
         }
 
         // Test to list active bins -- empty arraylist
@@ -150,7 +150,7 @@ class AppleBinAPITest {
     // End of nested list bins class
     }
 
-    // Test class for counting methods
+    //Test class for counting methods
     @Nested
     inner class CountingMethods {
 
@@ -192,11 +192,11 @@ class AppleBinAPITest {
     // End nested class counting methods
     }
 
-    // Test class for finish the bin method
+    //Test class for finish the bin method
     @Nested
     inner class FinishTheBin {
 
-        // Test to finish an active bin -- not existing
+        //Test to finish an active bin -- not existing
         @Test
         fun `finish bin that is not active`(){
             assertFalse(addBins!!.finishBin(6))
@@ -204,14 +204,14 @@ class AppleBinAPITest {
             assertFalse(emptyBins!!.finishBin(0))
         }
 
-        // Test to finish already finished bin
+        //Test to finish already finished bin
         @Test
         fun `finish bin that has been finished`(){
             assertTrue(addBins!!.findBin(1)!!.isBinFinished)
             assertFalse(addBins!!.finishBin(1))
         }
 
-        // Test to finish bin
+        //Test to finish bin
         @Test
         fun `finish an active bin`(){
             assertFalse(addBins!!.findBin(0)!!.isBinFinished)
@@ -221,9 +221,6 @@ class AppleBinAPITest {
 
     // End nested class finish bin
     }
-
-
-
 
 //End of Test class
 }
