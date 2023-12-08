@@ -19,9 +19,7 @@ import kotlin.system.exitProcess
 
 // Logger variable
 var logger = KotlinLogging.logger{}
-var currentTime = LocalDateTime.now()!!
-var time2 = currentTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!
-
+var time2 = LocalDateTime.now()!!.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!
 
 // AppleBinAPI variable
 private var appleBinAPI = AppleBinAPI(JSONSerializer(File("bins.json")))
@@ -210,7 +208,7 @@ fun addBin(){
     fun variety(): String {
         return if (isEatingApple) readNextLine("Variety: ") else "Bramley"
     }
-    val isAdded = appleBinAPI.add(AppleBin(batch, isEatingApple, variety(), time2, null, false))
+    val isAdded = appleBinAPI.add(AppleBin(batch, isEatingApple, variety(), LocalDateTime.now()!!.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!, null, false))
 
     if (isAdded) {
         println("Bin added")
@@ -254,7 +252,7 @@ fun addPLOutput(){
     }
     val type = readNextLine("Type: ")
     val count: Int = readNextInt("Add volume: ")
-    val addPLOutput = outputPLAPI.addOutputPL(OutputPL(batch, isEatingApple, variety,type, count, time2))
+    val addPLOutput = outputPLAPI.addOutputPL(OutputPL(batch, isEatingApple, variety,type, count, LocalDateTime.now()!!.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!))
 
     if (addPLOutput) {
         println("Added +$count")
@@ -467,9 +465,9 @@ fun loadAll(){
 }
 // Dummy data
 fun dummyData() {
-    appleBinAPI.add(AppleBin("27", true, "Red Elstar", time2, null, true))
-    appleBinAPI.add(AppleBin("Pl", false, "Bramley", time2, null, true))
-    appleBinAPI.add(AppleBin("Pl", false, "Bramley", time2, null, false))
+    appleBinAPI.add(AppleBin("27", true, "Red Elstar", LocalDateTime.now()!!.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!, null, true))
+    appleBinAPI.add(AppleBin("Pl", false, "Bramley", LocalDateTime.now()!!.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!, null, true))
+    appleBinAPI.add(AppleBin("Pl", false, "Bramley", LocalDateTime.now()!!.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!, null, false))
 }
 
 // Dummy data 77
@@ -482,8 +480,7 @@ fun dummyData77(){
     outputAPI.addOutput(Output(false, "Bramley", "13kg", 15))
     outputAPI.addOutput(Output(false, "Bramley", "13kg Large", 13))
     outputAPI.addOutput(Output(false, "Bramley", "CT 4pk", 20))
-    outputPLAPI.addOutputPL(OutputPL("19", true, "Red Elstar", "Count 72", 160, time2))
-    outputPLAPI.addOutputPL(OutputPL("19", true, "Red Elstar", "Count 96", 159, time2))
-    outputPLAPI.addOutputPL(OutputPL("19", false, "Bramley", "100kg", 9, time2))
+    outputPLAPI.addOutputPL(OutputPL("19", true, "Red Elstar", "Count 72", 160, LocalDateTime.now()!!.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!))
+    outputPLAPI.addOutputPL(OutputPL("19", true, "Red Elstar", "Count 96", 159, LocalDateTime.now()!!.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!))
+    outputPLAPI.addOutputPL(OutputPL("19", false, "Bramley", "100kg", 9, LocalDateTime.now()!!.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!))
 }
-
