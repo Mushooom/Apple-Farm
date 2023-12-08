@@ -1,17 +1,11 @@
 package controllers
 
-//Imports
-import com.sun.org.apache.xpath.internal.operations.Bool
+// Imports
 import models.AppleBin
-import org.jetbrains.dokka.model.doc.Index
-import org.jetbrains.dokka.model.doc.Listing
 import persistence.Serializer
-import utils.ScannerInput
 import utils.ScannerInput.ScannerInput.readNextChar
-import utils.ScannerInput.ScannerInput.readNextLine
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-
 
 // Controller class for AppleBin
 class AppleBinAPI(serializerType: Serializer) {
@@ -34,7 +28,6 @@ class AppleBinAPI(serializerType: Serializer) {
         return appleBins.add(appleBin)
     }
 
-
     // Function to format list of strings -- to my desired format
     private fun formatListString(binsToFormat: List<AppleBin>): String =
         binsToFormat
@@ -50,7 +43,6 @@ class AppleBinAPI(serializerType: Serializer) {
                     .toString() + ": " + "Batch: " + appleBin.batch + " Time started: " + appleBin.timeStarted + "\n Time Finished: " + appleBin.timeFinished
             }
 
-
     // Function format by variety
     fun formatVariety(binsToFormat: List<AppleBin>): String =
         binsToFormat
@@ -64,8 +56,7 @@ class AppleBinAPI(serializerType: Serializer) {
     }
 
     // Function to count all finished bins
-    fun numberOfFinishedBins(): Int =
-        appleBins.count { appleBin: AppleBin -> appleBin.isBinFinished }
+    fun numberOfFinishedBins(): Int = appleBins.count { appleBin: AppleBin -> appleBin.isBinFinished }
 
     // Function to count finished bramleys
     fun numberOfFinishedBramleyBins(): Int =
@@ -76,32 +67,43 @@ class AppleBinAPI(serializerType: Serializer) {
         appleBins.count { appleBin: AppleBin -> appleBin.isBinFinished && appleBin.isEatingApple }
 
     // Function active bins -- should always be only one at the time
-    fun numberOfActiveBins(): Int =
-        appleBins.count { appleBin: AppleBin -> !appleBin.isBinFinished }
+    fun numberOfActiveBins(): Int = appleBins.count { appleBin: AppleBin -> !appleBin.isBinFinished }
 
     // Fuction to list all bins in the system
     fun listAllBins(): String =
-        if (appleBins.isEmpty()) "\nNo bins\n"
-        else formatListString(appleBins)
+        if (appleBins.isEmpty()) {
+            "\nNo bins\n"
+        } else {
+            formatListString(appleBins)
+        }
 
     // Function to list finished if want to check for variety date etc.
     fun listFinishedBins(): String =
-        if (numberOfFinishedBins() == 0) "No bins have been graded"
-        else formatFinishedBinsString(appleBins.filter { appleBin: AppleBin -> appleBin.isBinFinished })
+        if (numberOfFinishedBins() == 0) {
+            "No bins have been graded"
+        } else {
+            formatFinishedBinsString(appleBins.filter { appleBin: AppleBin -> appleBin.isBinFinished })
+        }
 
     // Function to list active (not finished bins) should be just one at the time
     fun listActiveBins(): String =
-        if (numberOfActiveBins() == 0) "No bins in grading"
-        else formatListString(appleBins.filter { appleBin: AppleBin -> !appleBin.isBinFinished })
-
+        if (numberOfActiveBins() == 0) {
+            "No bins in grading"
+        } else {
+            formatListString(appleBins.filter { appleBin: AppleBin -> !appleBin.isBinFinished })
+        }
 
     // Function to check for an eating apple
     fun isEatingApple(): Boolean {
         do {
             val input = readNextChar("Eating apple? Y/N: ")
-            if ((input == 'y') || (input == 'Y')) return true else if ((input == 'n') || (input == 'N')) {
+            if ((input == 'y') || (input == 'Y')) {
+                return true
+            } else if ((input == 'n') || (input == 'N')) {
                 return false
-            } else println("Wrong answer")
+            } else {
+                println("Wrong answer")
+            }
         } while (true)
     }
 
@@ -125,7 +127,10 @@ class AppleBinAPI(serializerType: Serializer) {
     }
 
     // Function to check if there are items in ArrayList
-    fun isValidListIndex(index: Int, list: List<Any>): Boolean {
+    fun isValidListIndex(
+        index: Int,
+        list: List<Any>,
+    ): Boolean {
         return (index >= 0 && index < list.size)
     }
 
@@ -133,7 +138,9 @@ class AppleBinAPI(serializerType: Serializer) {
     fun findBin(index: Int): AppleBin? {
         return if (isValidListIndex(index, appleBins)) {
             appleBins[index]
-        } else null
+        } else {
+            null
+        }
     }
 
     // Fucntion active bin returns Index as string
@@ -144,8 +151,11 @@ class AppleBinAPI(serializerType: Serializer) {
             }
 
     fun listOneOnlyActiveBins(): String =
-        if (numberOfActiveBins() == 0) "999999"
-        else formatActiveBin(appleBins.filter { appleBin: AppleBin -> !appleBin.isBinFinished })
+        if (numberOfActiveBins() == 0) {
+            "999999"
+        } else {
+            formatActiveBin(appleBins.filter { appleBin: AppleBin -> !appleBin.isBinFinished })
+        }
 
-//End of function AppleBinAPI
+// End of function AppleBinAPI
 }

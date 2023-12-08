@@ -1,32 +1,29 @@
 // Alexander Novakovsky Apple Farm App
 import controllers.AppleBinAPI
-import models.AppleBin
 import controllers.OutputAPI
-import models.Output
 import controllers.OutputPLAPI
+import models.AppleBin
+import models.Output
 import models.OutputPL
 import mu.KotlinLogging
+import persistence.JSONSerializer
 import utils.ScannerInput.ScannerInput.readNextInt
 import utils.ScannerInput.ScannerInput.readNextLine
 import java.io.File
-import persistence.JSONSerializer
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-
-
 import kotlin.system.exitProcess
 
-
 // Logger variable
-var logger = KotlinLogging.logger{}
-var currentTime = LocalDateTime.now()!!
-var time2 = currentTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!
-
+var logger = KotlinLogging.logger {}
+var time2 = LocalDateTime.now()!!.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!
 
 // AppleBinAPI variable
 private var appleBinAPI = AppleBinAPI(JSONSerializer(File("bins.json")))
+
 // OutputAPI variable
 private var outputAPI = OutputAPI(JSONSerializer(File("output.json")))
+
 // OutputPLAPI variable
 private var outputPLAPI = OutputPLAPI(JSONSerializer(File("outputPL.json")))
 
@@ -44,7 +41,8 @@ fun main() {
 
 // Main menu function
 fun mainMenu(): Int {
-    return readNextInt("""
+    return readNextInt(
+        """
         APPLE FARM APP
         Today: $time2
         
@@ -66,12 +64,12 @@ fun mainMenu(): Int {
         0. Exit
         
         Enter option: 
-    """.trimIndent()
+        """.trimIndent(),
     )
 }
 
 // Run menu function
-fun runMenu(){
+fun runMenu() {
     do {
         when (val option: Int = mainMenu()) {
             1 -> runInput()
@@ -119,7 +117,7 @@ fun inputMenu(): Int {
         0. Exit
         
         Enter option: 
-    """.trimIndent()
+        """.trimIndent(),
     )
 }
 
@@ -150,35 +148,35 @@ fun runInput() {
 fun outputMenu(): Int {
     return readNextInt(
         """
-            APPLE FARM PACKING
-            $time2
-            
-            Packing Output Menu:
-            1. Musgraves eating apples 
-            2. Musgraves bramleys
-            3. Phillip Little
-            4. Add other output
-            44. Save output
-            5. List all output
-            55. Index of one
-            6. List Phillip Little -- BTC
-            7. List eating apples for musgraves -- VTC
-            8. List bramley for musgraves -- VTC
-            9. List musgraves all
-            55. Load all output
-            56. Load musgraves output
-            57. Load PL output
-            66. Main menu
-            77. Dummy Data
-            0. Exit
-            
-            Enter option:
-        """.trimIndent()
+        APPLE FARM PACKING
+        $time2
+        
+        Packing Output Menu:
+        1. Musgraves eating apples 
+        2. Musgraves bramleys
+        3. Phillip Little
+        4. Add other output
+        44. Save output
+        5. List all output
+        55. Index of one
+        6. List Phillip Little -- BTC
+        7. List eating apples for musgraves -- VTC
+        8. List bramley for musgraves -- VTC
+        9. List musgraves all
+        55. Load all output
+        56. Load musgraves output
+        57. Load PL output
+        66. Main menu
+        77. Dummy Data
+        0. Exit
+        
+        Enter option:
+        """.trimIndent(),
     )
 }
 
 // Sub menu for Output
-fun runOutput(){
+fun runOutput() {
     do {
         when (val option: Int = outputMenu()) {
             1 -> addMusgravesEating()
@@ -203,14 +201,26 @@ fun runOutput(){
 }
 
 // Function add bin
-fun addBin(){
+fun addBin() {
     logger.info { "Adding new Bin to grading" }
     val batch = readNextLine("Batch: ")
     val isEatingApple = appleBinAPI.isEatingApple()
+
     fun variety(): String {
         return if (isEatingApple) readNextLine("Variety: ") else "Bramley"
     }
-    val isAdded = appleBinAPI.add(AppleBin(batch, isEatingApple, variety(), time2, null, false))
+
+    val isAdded =
+        appleBinAPI.add(
+            AppleBin(
+                batch,
+                isEatingApple,
+                variety(),
+                LocalDateTime.now()!!.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!,
+                null,
+                false,
+            ),
+        )
 
     if (isAdded) {
         println("Bin added")
@@ -220,17 +230,18 @@ fun addBin(){
 }
 
 // Function add output
-fun addOutput(){
+fun addOutput() {
     logger.info { "Adding packed products" }
     val isEatingApple = appleBinAPI.isEatingApple()
-    val variety = if (isEatingApple) {
-        readNextLine("Variety: ")
-    } else {
-        "Bramley"
-    }
-/*    fun variety(): String {
-        return if (isEatingApple) readNextLine("Variety: ") else "Bramley"
-    }*/
+    val variety =
+        if (isEatingApple) {
+            readNextLine("Variety: ")
+        } else {
+            "Bramley"
+        }
+    /*    fun variety(): String {
+            return if (isEatingApple) readNextLine("Variety: ") else "Bramley"
+        }*/
     val type = readNextLine("Type: ")
     val count: Int = readNextInt("Add volume: ")
     val adding = outputAPI.addOutput(Output(isEatingApple, variety, type, count))
@@ -243,18 +254,29 @@ fun addOutput(){
 }
 
 // Function add output for Phillip Little
-fun addPLOutput(){
+fun addPLOutput() {
     logger.info { "Adding PL" }
     val batch = readNextLine("Batch: ")
     val isEatingApple = appleBinAPI.isEatingApple()
-    val variety = if (isEatingApple) {
-        readNextLine("Variety: ")
-    } else {
-        "Bramley"
-    }
+    val variety =
+        if (isEatingApple) {
+            readNextLine("Variety: ")
+        } else {
+            "Bramley"
+        }
     val type = readNextLine("Type: ")
     val count: Int = readNextInt("Add volume: ")
-    val addPLOutput = outputPLAPI.addOutputPL(OutputPL(batch, isEatingApple, variety,type, count, time2))
+    val addPLOutput =
+        outputPLAPI.addOutputPL(
+            OutputPL(
+                batch,
+                isEatingApple,
+                variety,
+                type,
+                count,
+                LocalDateTime.now()!!.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!,
+            ),
+        )
 
     if (addPLOutput) {
         println("Added +$count")
@@ -264,7 +286,7 @@ fun addPLOutput(){
 }
 
 // Function to add musgraves eating apples
-fun addMusgravesEating(){
+fun addMusgravesEating() {
     logger.info { "Adding musgraves eating apples" }
     val variety = readNextLine("Variety: ")
     val type = readNextLine("Type: ")
@@ -279,7 +301,7 @@ fun addMusgravesEating(){
 }
 
 // Function add musgraves bramley
-fun addMusgravesBramley(){
+fun addMusgravesBramley() {
     logger.info { "Adding musgraves bramleys" }
     val variety = "Bramley"
     val type = readNextLine("Type: ")
@@ -294,7 +316,7 @@ fun addMusgravesBramley(){
 }
 
 // Function list all output
-fun listOutput(){
+fun listOutput() {
     println("Musgraves:")
     println(red + outputAPI.listEatingOutputVTC() + resetColour)
     println(green + outputAPI.listBramleyOutputVTC() + resetColour)
@@ -302,12 +324,12 @@ fun listOutput(){
 }
 
 // Function list musgraves output - variety type count
-fun listOutputM(){
+fun listOutputM() {
     println(outputAPI.listOutputM())
 }
 
 // Function list Phillip Output -- batch type count
-fun listOutputPL(){
+fun listOutputPL() {
     println(outputPLAPI.listOutputPL())
 }
 
@@ -318,19 +340,19 @@ fun listAllBins() {
 
 // Function to list active bins
 // TODO should be only one at the time!!
-fun activeBins(){
+fun activeBins() {
     println(appleBinAPI.listActiveBins())
 }
 
 // Function exit -- application exit on selecting 0 from menu
-fun exitApp(){
+fun exitApp() {
     println("App exiting")
     logger.info { "App terminated" }
     exitProcess(0)
 }
 
 // Function finish the bin
-fun finishBin(){
+fun finishBin() {
     // First check if there is an active bin
     activeBins()
     if (appleBinAPI.numberOfActiveBins() > 0) {
@@ -345,12 +367,12 @@ fun finishBin(){
 }
 
 // Function display finished bramley bins
-fun finishedBramleyBins(){
+fun finishedBramleyBins() {
     println("Finished Bramley bins: " + appleBinAPI.numberOfFinishedBramleyBins())
 }
 
 // Function to display finished eating apple bins
-fun finishedEatingAppleBins(){
+fun finishedEatingAppleBins() {
     println("Finished eating apple bins: " + appleBinAPI.numberOfFinishedEatingAppleBins())
 }
 
@@ -360,7 +382,7 @@ fun listEatingApplesVTC() {
 }
 
 // Function to list bramleys Output for musgraves -- VTC format
-fun listBramleyVTC(){
+fun listBramleyVTC() {
     println(green + outputAPI.listBramleyOutputVTC() + resetColour)
 }
 
@@ -369,121 +391,175 @@ fun listOneActiveOnly(): Int {
     return (appleBinAPI.listOneOnlyActiveBins()).toInt()
 }
 
-
-
 // Auto finish
 
-
 fun quickFinish() {
-        if (listOneActiveOnly() < 999999) {
-            val binToFinish = listOneActiveOnly()
-            // Pass the index of bin to be finished
-            if (appleBinAPI.finishBin(binToFinish)) {
-                println("Bin finished")
-            } else {
-                println("Error")
-            }
+    if (listOneActiveOnly() < 999999) {
+        val binToFinish = listOneActiveOnly()
+        // Pass the index of bin to be finished
+        if (appleBinAPI.finishBin(binToFinish)) {
+            println("Bin finished")
+        } else {
+            println("Error")
         }
+    }
     addBin()
 }
 
 fun addAutoFinish() {
-    if (appleBinAPI.numberOfActiveBins() == 0) addBin()
-    else if (appleBinAPI.numberOfActiveBins() == 1) quickFinish()
+    if (appleBinAPI.numberOfActiveBins() == 0) {
+        addBin()
+    } else if (appleBinAPI.numberOfActiveBins() == 1) {
+        quickFinish()
+    }
 }
 
-
 // Functions save -- input, output, all
-fun saveInput(){
+fun saveInput() {
     try {
         appleBinAPI.store()
-    } catch (e: Exception){
+    } catch (e: Exception) {
         System.err.println("Error saving input to file: $e")
     }
 }
 
-fun saveOutput(){
+fun saveOutput() {
     try {
         outputAPI.store()
         logger.info { "Saving one" }
-    } catch (e: Exception){
+    } catch (e: Exception) {
         System.err.println("Error saving output to file: $e")
     }
 }
 
-fun saveOutputPL(){
+fun saveOutputPL() {
     try {
         outputPLAPI.store()
         logger.info { "Saving PL" }
-    } catch (e: Exception){
+    } catch (e: Exception) {
         System.err.println("Error saving PL output to file $e")
     }
 }
 
-fun saveBothOutputs(){
+fun saveBothOutputs() {
     saveOutput()
     saveOutputPL()
 }
-fun saveAll(){
+
+fun saveAll() {
     saveInput()
     saveOutput()
     saveOutputPL()
 }
 
 // Functions load -- input, output, all
-fun loadInput(){
+fun loadInput() {
     try {
         appleBinAPI.load()
-    } catch (e: Exception){
+    } catch (e: Exception) {
         System.err.println("Error loading from file: $e")
     }
 }
 
-fun loadOutput(){
+fun loadOutput() {
     try {
         outputAPI.load()
-    } catch (e: Exception){
+    } catch (e: Exception) {
         System.err.println("Error loading from file: $e")
     }
 }
 
-fun loadOutputPL(){
+fun loadOutputPL() {
     try {
         outputPLAPI.load()
-    } catch (e: Exception){
+    } catch (e: Exception) {
         System.err.println("Error loading from file: $e")
     }
 }
 
-fun loadBothOutputs(){
+fun loadBothOutputs() {
     loadOutput()
     loadOutputPL()
 }
 
-fun loadAll(){
+fun loadAll() {
     loadInput()
     loadOutput()
     loadOutputPL()
 }
+
 // Dummy data
 fun dummyData() {
-    appleBinAPI.add(AppleBin("27", true, "Red Elstar", time2, null, true))
-    appleBinAPI.add(AppleBin("Pl", false, "Bramley", time2, null, true))
-    appleBinAPI.add(AppleBin("Pl", false, "Bramley", time2, null, false))
+    appleBinAPI.add(
+        AppleBin(
+            "27",
+            true,
+            "Red Elstar",
+            LocalDateTime.now()!!.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!,
+            null,
+            true,
+        ),
+    )
+    appleBinAPI.add(
+        AppleBin(
+            "Pl",
+            false,
+            "Bramley",
+            LocalDateTime.now()!!.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!,
+            null,
+            true,
+        ),
+    )
+    appleBinAPI.add(
+        AppleBin(
+            "Pl",
+            false,
+            "Bramley",
+            LocalDateTime.now()!!.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!,
+            null,
+            false,
+        ),
+    )
 }
 
 // Dummy data 77
-fun dummyData77(){
+fun dummyData77() {
     outputAPI.addOutput(Output(true, "Red Elstar", "SV 6pk", 25))
-    outputAPI.addOutput(Output(true, "Red Elstar", "CT 4pk", 8 ))
+    outputAPI.addOutput(Output(true, "Red Elstar", "CT 4pk", 8))
     outputAPI.addOutput(Output(true, "Red Elstar", "Premium loose 50", 10))
     outputAPI.addOutput(Output(true, "Red Elstar", "Bag 8pk", 27))
     outputAPI.addOutput(Output(false, "Bramley", "SV 4pk", 60))
     outputAPI.addOutput(Output(false, "Bramley", "13kg", 15))
     outputAPI.addOutput(Output(false, "Bramley", "13kg Large", 13))
     outputAPI.addOutput(Output(false, "Bramley", "CT 4pk", 20))
-    outputPLAPI.addOutputPL(OutputPL("19", true, "Red Elstar", "Count 72", 160, time2))
-    outputPLAPI.addOutputPL(OutputPL("19", true, "Red Elstar", "Count 96", 159, time2))
-    outputPLAPI.addOutputPL(OutputPL("19", false, "Bramley", "100kg", 9, time2))
+    outputPLAPI.addOutputPL(
+        OutputPL(
+            "19",
+            true,
+            "Red Elstar",
+            "Count 72",
+            160,
+            LocalDateTime.now()!!.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!,
+        ),
+    )
+    outputPLAPI.addOutputPL(
+        OutputPL(
+            "19",
+            true,
+            "Red Elstar",
+            "Count 96",
+            159,
+            LocalDateTime.now()!!.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!,
+        ),
+    )
+    outputPLAPI.addOutputPL(
+        OutputPL(
+            "19",
+            false,
+            "Bramley",
+            "100kg",
+            9,
+            LocalDateTime.now()!!.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!,
+        ),
+    )
 }
-

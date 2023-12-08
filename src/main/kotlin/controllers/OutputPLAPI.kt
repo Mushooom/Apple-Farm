@@ -1,11 +1,11 @@
 package controllers
 
-//Imports
+// Imports
 import models.OutputPL
 import persistence.Serializer
 
 // Controller for OutputPL
-class OutputPLAPI (serializerType: Serializer){
+class OutputPLAPI(serializerType: Serializer) {
     private var outputPLList = ArrayList<OutputPL>()
     private var serializer: Serializer = serializerType
 
@@ -28,14 +28,17 @@ class OutputPLAPI (serializerType: Serializer){
     // Function to format list for Phillip Little -- batch, type, count
     private fun formatPLString(outputFormatPL: List<OutputPL>): String =
         outputFormatPL
-            .joinToString (separator = "\n") { outputPL ->
+            .joinToString(separator = "\n") { outputPL ->
                 "Batch: " + outputPL.batch + " " + outputPL.type + " x" + outputPL.count
             }
 
     // Function to list Phillip Little output -- format PL
-    fun listOutputPL():  String =
-        if (outputPLList.isEmpty()) "Nothing packed for Phillip today"
-        else formatPLString(outputPLList)
+    fun listOutputPL(): String =
+        if (outputPLList.isEmpty()) {
+            "Nothing packed for Phillip today"
+        } else {
+            formatPLString(outputPLList)
+        }
 
     // Function to count Phillip Litlle output
     fun numberOfOutputPL(): Int {

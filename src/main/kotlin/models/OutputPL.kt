@@ -6,5 +6,5 @@ data class OutputPL(
     var variety: String,
     var type: String,
     var count: Int,
-    var date: String
+    var date: String,
 )
