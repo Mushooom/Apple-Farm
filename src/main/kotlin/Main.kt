@@ -31,9 +31,9 @@ private var outputPLAPI = OutputPLAPI(JSONSerializer(File("outputPL.json")))
 
 // Colours
 // ref: https://discuss.kotlinlang.org/t/printing-in-colors/22492
-const val red = "\u001b[31m"
-const val green = "\u001b[32m"
-const val resetColour = "\u001b[0m"
+const val RED = "\u001b[31m"
+const val GREEN = "\u001b[32m"
+const val RESETCOLOUR = "\u001b[0m"
 
 // Main function
 fun main() {
@@ -320,8 +320,8 @@ fun addMusgravesBramley() {
 // Function list all output
 fun listOutput() {
     println("Musgraves:")
-    println(red + outputAPI.listEatingOutputVTC() + resetColour)
-    println(green + outputAPI.listBramleyOutputVTC() + resetColour)
+    println(RED + outputAPI.listEatingOutputVTC() + RESETCOLOUR)
+    println(GREEN + outputAPI.listBramleyOutputVTC() + RESETCOLOUR)
     println("Phillip Little:\n " + outputPLAPI.listOutputPL())
 }
 
@@ -379,12 +379,12 @@ fun finishedEatingAppleBins() {
 
 // Function to list eating apples Output for musgraves -- variety type and count
 fun listEatingApplesVTC() {
-    println(red + outputAPI.listEatingOutputVTC() + resetColour)
+    println(RED + outputAPI.listEatingOutputVTC() + RESETCOLOUR)
 }
 
 // Function to list bramleys Output for musgraves -- VTC format
 fun listBramleyVTC() {
-    println(green + outputAPI.listBramleyOutputVTC() + resetColour)
+    println(GREEN + outputAPI.listBramleyOutputVTC() + RESETCOLOUR)
 }
 
 // Helper function to list oneActiveOnly bin
