@@ -16,7 +16,9 @@ import kotlin.system.exitProcess
 
 // Logger variable
 var logger = KotlinLogging.logger {}
-var time2 = LocalDateTime.now()!!.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!
+
+// Time format code:
+// LocalDateTime.now()!!.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!
 
 // AppleBinAPI variable
 private var appleBinAPI = AppleBinAPI(JSONSerializer(File("bins.json")))
@@ -44,7 +46,7 @@ fun mainMenu(): Int {
     return readNextInt(
         """
         APPLE FARM APP
-        Today: $time2
+        Today: ${timeNow()}
         
         Main menu:
         1. Input
@@ -96,7 +98,7 @@ fun inputMenu(): Int {
     return readNextInt(
         """
         APPLE FARM GRADING INPUT
-        $time2
+        ${timeNow()}
         
         Input Menu:
         1. Add bin
@@ -149,7 +151,7 @@ fun outputMenu(): Int {
     return readNextInt(
         """
         APPLE FARM PACKING
-        $time2
+        ${timeNow()}
         
         Packing Output Menu:
         1. Musgraves eating apples 
@@ -339,7 +341,6 @@ fun listAllBins() {
 }
 
 // Function to list active bins
-// TODO should be only one at the time!!
 fun activeBins() {
     println(appleBinAPI.listActiveBins())
 }
@@ -398,7 +399,7 @@ fun quickFinish() {
         val binToFinish = listOneActiveOnly()
         // Pass the index of bin to be finished
         if (appleBinAPI.finishBin(binToFinish)) {
-            println("Bin finished")
+            println("Bin finished index: $binToFinish")
         } else {
             println("Error")
         }
@@ -488,6 +489,11 @@ fun loadAll() {
     loadOutputPL()
 }
 
+// Function to return the current time and date
+fun timeNow(): String {
+    return LocalDateTime.now()!!.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!
+}
+
 // Dummy data
 fun dummyData() {
     appleBinAPI.add(
@@ -495,7 +501,7 @@ fun dummyData() {
             "27",
             true,
             "Red Elstar",
-            LocalDateTime.now()!!.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!,
+            timeNow(),
             null,
             true,
         ),
@@ -505,7 +511,7 @@ fun dummyData() {
             "Pl",
             false,
             "Bramley",
-            LocalDateTime.now()!!.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!,
+            timeNow(),
             null,
             true,
         ),
@@ -515,7 +521,7 @@ fun dummyData() {
             "Pl",
             false,
             "Bramley",
-            LocalDateTime.now()!!.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!,
+            timeNow(),
             null,
             false,
         ),
@@ -539,7 +545,7 @@ fun dummyData77() {
             "Red Elstar",
             "Count 72",
             160,
-            LocalDateTime.now()!!.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!,
+            timeNow(),
         ),
     )
     outputPLAPI.addOutputPL(
@@ -549,7 +555,7 @@ fun dummyData77() {
             "Red Elstar",
             "Count 96",
             159,
-            LocalDateTime.now()!!.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!,
+            timeNow(),
         ),
     )
     outputPLAPI.addOutputPL(
@@ -559,7 +565,7 @@ fun dummyData77() {
             "Bramley",
             "100kg",
             9,
-            LocalDateTime.now()!!.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))!!,
+            timeNow(),
         ),
     )
 }

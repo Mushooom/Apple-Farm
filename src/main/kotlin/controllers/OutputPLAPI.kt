@@ -40,7 +40,7 @@ class OutputPLAPI(serializerType: Serializer) {
             formatPLString(outputPLList)
         }
 
-    // Function to count Phillip Litlle output
+    // Function to count Phillip Little output
     fun numberOfOutputPL(): Int {
         return outputPLList.size
     }

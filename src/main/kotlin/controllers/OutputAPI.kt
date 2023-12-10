@@ -36,7 +36,7 @@ class OutputAPI(serializerType: Serializer) {
             outputFormat
                 .joinToString(separator = "\n") { output ->
                     outputList.indexOf(output).toString() + ": " + output.toString() }
-    */
+     */
 
     // Function to format a list of strings for musgraves -- variety, type and count
     private fun formatMString(outputFormatM: List<Output>): String =

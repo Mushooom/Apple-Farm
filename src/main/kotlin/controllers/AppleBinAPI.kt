@@ -36,11 +36,22 @@ class AppleBinAPI(serializerType: Serializer) {
             }
 
     // Function to format finished bins to string
-    fun formatFinishedBinsString(binsToFormat: List<AppleBin>): String =
+    private fun formatFinishedBinsString(binsToFormat: List<AppleBin>): String =
         binsToFormat
             .joinToString(separator = "\n") { appleBin ->
-                appleBins.indexOf(appleBin)
-                    .toString() + ": " + "Batch: " + appleBin.batch + " Time started: " + appleBin.timeStarted + "\n Time Finished: " + appleBin.timeFinished
+                buildString {
+                    append(
+                        appleBins.indexOf(appleBin)
+                            .toString(),
+                    )
+                    append(": ")
+                    append("Batch: ")
+                    append(appleBin.batch)
+                    append(" Time started: ")
+                    append(appleBin.timeStarted)
+                    append("\n Time Finished: ")
+                    append(appleBin.timeFinished)
+                }
             }
 
     // Function format by variety
@@ -59,17 +70,15 @@ class AppleBinAPI(serializerType: Serializer) {
     fun numberOfFinishedBins(): Int = appleBins.count { appleBin: AppleBin -> appleBin.isBinFinished }
 
     // Function to count finished bramleys
-    fun numberOfFinishedBramleyBins(): Int =
-        appleBins.count { appleBin: AppleBin -> appleBin.isBinFinished && !appleBin.isEatingApple }
+    fun numberOfFinishedBramleyBins(): Int = appleBins.count { appleBin: AppleBin -> appleBin.isBinFinished && !appleBin.isEatingApple }
 
     // Function to count finished eating apple bins
-    fun numberOfFinishedEatingAppleBins(): Int =
-        appleBins.count { appleBin: AppleBin -> appleBin.isBinFinished && appleBin.isEatingApple }
+    fun numberOfFinishedEatingAppleBins(): Int = appleBins.count { appleBin: AppleBin -> appleBin.isBinFinished && appleBin.isEatingApple }
 
     // Function active bins -- should always be only one at the time
     fun numberOfActiveBins(): Int = appleBins.count { appleBin: AppleBin -> !appleBin.isBinFinished }
 
-    // Fuction to list all bins in the system
+    // Function to list all bins in the system
     fun listAllBins(): String =
         if (appleBins.isEmpty()) {
             "\nNo bins\n"
@@ -111,7 +120,7 @@ class AppleBinAPI(serializerType: Serializer) {
     fun finishBin(indexToFinish: Int): Boolean {
         // Check is bin is not finished
         if (isValidIndex(indexToFinish)) {
-            var binToFinish = appleBins[indexToFinish]
+            val binToFinish = appleBins[indexToFinish]
             if (!binToFinish.isBinFinished) {
                 binToFinish.isBinFinished = true
                 binToFinish.timeFinished = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))
@@ -121,20 +130,20 @@ class AppleBinAPI(serializerType: Serializer) {
         return false
     }
 
-    // Function to validate an idex of a bin
-    fun isValidIndex(index: Int): Boolean {
+    // Function to validate an index of a bin
+    private fun isValidIndex(index: Int): Boolean {
         return isValidListIndex(index, appleBins)
     }
 
     // Function to check if there are items in ArrayList
-    fun isValidListIndex(
+    private fun isValidListIndex(
         index: Int,
         list: List<Any>,
     ): Boolean {
         return (index >= 0 && index < list.size)
     }
 
-    // Function to find an idex of a bin
+    // Function to find an index of a bin
     fun findBin(index: Int): AppleBin? {
         return if (isValidListIndex(index, appleBins)) {
             appleBins[index]
@@ -143,8 +152,8 @@ class AppleBinAPI(serializerType: Serializer) {
         }
     }
 
-    // Fucntion active bin returns Index as string
-    fun formatActiveBin(binsToFormat: List<AppleBin>): String =
+    // Function active bin returns Index as string
+    private fun formatActiveBin(binsToFormat: List<AppleBin>): String =
         binsToFormat
             .joinToString { appleBin ->
                 appleBins.indexOf(appleBin).toString()

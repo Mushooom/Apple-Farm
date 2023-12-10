@@ -62,7 +62,7 @@ class AppleBinAPITest {
         fun `adding a bin to empty arraylist`() {
             val newBin = AppleBin("EmptyListBatch", true, "Red", time3, time3 + 1, false)
             assertEquals(0, actual = emptyBins!!.numberOfBins())
-            assertTrue(/* condition = */ emptyBins!!.add(newBin))
+            assertTrue(emptyBins!!.add(newBin))
             assertEquals(1, emptyBins!!.numberOfBins())
             assertEquals(newBin, emptyBins!!.findBin(index = emptyBins!!.numberOfBins() - 1))
             // End of adding to empty arraylist
@@ -72,7 +72,7 @@ class AppleBinAPITest {
         fun `adding a bin to populated arraylist`() {
             val newBin = AppleBin("PopulatedBatch", false, "Bramley", time3, time3 + 2, true)
             assertEquals(5, addBins!!.numberOfBins())
-            assertTrue(/* condition = */ addBins!!.add(newBin))
+            assertTrue(addBins!!.add(newBin))
             assertEquals(6, addBins!!.numberOfBins())
             assertEquals(newBin, addBins!!.findBin(addBins!!.numberOfBins() - 1))
             // End of adding to populated arraylist

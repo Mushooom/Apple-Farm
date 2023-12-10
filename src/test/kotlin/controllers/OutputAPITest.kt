@@ -65,7 +65,7 @@ class OutputAPITest {
         fun `adding output to empty arraylist`() {
             val newOutput = Output(true, "Empty array", "6pkSV", 45)
             assertEquals(0, emptyOutput!!.numberOfPacked())
-            assertTrue(/* condition = */ emptyOutput!!.addOutput(newOutput))
+            assertTrue(emptyOutput!!.addOutput(newOutput))
             assertEquals(1, emptyOutput!!.numberOfPacked())
             // End of adding to empty arraylist
         }
@@ -74,7 +74,7 @@ class OutputAPITest {
         fun `adding output to populated arraylist`() {
             val newOutput = Output(false, "Populated array", "4pkCT", 15)
             assertEquals(7, addOutput!!.numberOfPacked())
-            assertTrue(/* condition = */ addOutput!!.addOutput(newOutput))
+            assertTrue(addOutput!!.addOutput(newOutput))
             assertEquals(8, addOutput!!.numberOfPacked())
             // End of adding to populated arraylist
         }

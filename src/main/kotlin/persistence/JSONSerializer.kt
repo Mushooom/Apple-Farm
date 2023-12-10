@@ -2,7 +2,9 @@ package persistence
 
 import com.thoughtworks.xstream.XStream
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver
-import models.*
+import models.AppleBin
+import models.Output
+import models.OutputPL
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
