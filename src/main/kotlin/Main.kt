@@ -49,21 +49,25 @@ fun mainMenu(): Int {
         Today: ${timeNow()}
         
         Main menu:
-        1. Input
-        11. Save input
-        2. Output
-        22. Save output
-        33. Save all
-        34. Load all
-        3. Finish bin
-        4. Finished eating apple bins
-        5. Finished bramley bins
-        6. List all packed
-        7. One active bin only index
-        8. List all bins
-        88. Save all
-        99. Dummy Data
-        0. Exit
+        |----------------------------------
+        | 1 - Input   |   11 - Save Input
+        | 2 - Output  |   22 - Save Output
+        |----------------------------------
+        | 3 - Finish Bin
+        |----------------------------------
+        |        33 - Save All
+        |        34 - Load All
+        |----------------------------------
+        | 4 - Finished eating apple bins
+        | 5 - Finished bramley bins
+        | 6 - List all packed
+        | 7 - One active bin only index
+        | 8 - List all bins
+        |----------------------------------
+        | 99 - Dummy Data
+        |----------------------------------
+        | 0   -  Exit Application
+        |----------------------------------
         
         Enter option: 
         """.trimIndent(),
@@ -79,13 +83,13 @@ fun runMenu() {
             2 -> runOutput()
             22 -> saveOutput()
             3 -> finishBin()
+            33 -> saveAll()
             34 -> loadAll()
             4 -> finishedEatingAppleBins()
             5 -> finishedBramleyBins()
             6 -> listOutput()
             7 -> println(listOneActiveOnly())
             8 -> listAllBins()
-            88 -> saveAll()
             99 -> dummyData()
             0 -> exitApp()
             else -> println("Invalid option $option")
